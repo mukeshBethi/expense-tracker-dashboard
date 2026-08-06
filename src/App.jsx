@@ -80,10 +80,11 @@ export default function App() {
   if (!user) {
     return <AuthScreen onSignIn={signIn} onSignUp={signUp} authError={authError} clearAuthError={clearAuthError} />;
   }
+  if (loadError) {
+    return <p className="loading-error">Couldn't load your data. Please refresh the page.</p>;
+  }
   if (loading) {
-    return loadError
-      ? <p className="loading-error">Couldn't load your data. Please refresh the page.</p>
-      : <p className="loading-label">Loading your data…</p>;
+    return <p className="loading-label">Loading your data…</p>;
   }
 
   return (
