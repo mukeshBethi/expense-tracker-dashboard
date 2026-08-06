@@ -18,6 +18,15 @@
   --shadow:     0 16px 48px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4);
   --radius:     18px;
   --blur:       blur(24px) saturate(1.6);
+
+  /* ── Surfaces that used to be hardcoded white-based translucent fills ── */
+  --header-bg:         rgba(2, 4, 6, 0.72);
+  --surface-fill:       rgba(255, 255, 255, 0.05);
+  --surface-fill-soft:  rgba(255, 255, 255, 0.04);
+  --surface-fill-2:     rgba(255, 255, 255, 0.065);
+  --placeholder-color:  rgba(255, 255, 255, 0.25);
+  --option-bg:          #0d1f1a;
+  --danger-text:        #ffd9d9;
 }
 
 :root[data-theme="light"] {
@@ -32,6 +41,35 @@
   --glow: rgba(16, 185, 129, 0.25);
   --danger: #dc2626;
   --shadow: 0 8px 30px rgba(20, 24, 40, 0.08);
+
+  /* --warn (#fbbf24) is a pale amber meant for dark backgrounds; too low-contrast
+     as text on a light card, so darken it for light mode. --glow-sm is a decorative
+     shadow color used the same way in both themes, but nudged up slightly here so it
+     still reads against the lighter card surfaces. */
+  --warn:     #b45309;
+  --glow-sm:  rgba(16, 185, 129, 0.18);
+
+  /* Surfaces: the dark theme's "white tint on near-black" fills need to become
+     "dark tint on light" fills, not stay white (which disappears on a light card). */
+  --header-bg:          rgba(245, 247, 251, 0.75);
+  --surface-fill:       rgba(20, 24, 40, 0.045);
+  --surface-fill-soft:  rgba(20, 24, 40, 0.035);
+  --surface-fill-2:     rgba(20, 24, 40, 0.055);
+  --placeholder-color:  rgba(26, 31, 54, 0.35);
+  --option-bg:          #ffffff;
+  --danger-text:        #b91c1c;
+}
+
+/* Gradient "shine" text (brand title, auth title, hovered stat value) fades from
+   #fff toward the primary color, which is illegible on a light background — in
+   light mode fade from the readable dark text color instead. */
+:root[data-theme="light"] .brand h1,
+:root[data-theme="light"] .auth-title,
+:root[data-theme="light"] .stat-card:hover .stat-value {
+  background: linear-gradient(120deg, var(--text) 0%, var(--primary-l) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .expense-cards { display: none; }
@@ -67,7 +105,7 @@ html, body {
   gap: 16px;
   padding: 20px 36px;
   border-bottom: 1px solid var(--border-dim);
-  background: rgba(2, 4, 6, 0.72);
+  background: var(--header-bg);
   backdrop-filter: blur(20px);
   position: sticky;
   top: 0;
@@ -151,7 +189,7 @@ html, body {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.3px;
-  color: #fff;
+  color: var(--text);
 }
 
 /* =========================================================================
@@ -168,7 +206,7 @@ html, body {
 }
 
 input, select {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-fill);
   border: 1px solid var(--border-dim);
   color: var(--text);
   border-radius: 12px;
@@ -178,7 +216,7 @@ input, select {
   transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
 }
 
-input::placeholder { color: rgba(255,255,255,0.25); }
+input::placeholder { color: var(--placeholder-color); }
 
 input:focus, select:focus {
   background: rgba(16, 185, 129, 0.07);
@@ -186,7 +224,7 @@ input:focus, select:focus {
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
 }
 
-select option { background: #0d1f1a; color: var(--text); }
+select option { background: var(--option-bg); color: var(--text); }
 
 .form-actions { display: flex; gap: 10px; margin-top: 6px; }
 .inline-form { display: flex; gap: 10px; margin-top: 14px; }
@@ -220,7 +258,7 @@ select option { background: #0d1f1a; color: var(--text); }
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--surface-fill-2);
   color: var(--text);
   border-color: var(--border-dim);
   backdrop-filter: blur(8px);
@@ -256,7 +294,7 @@ select option { background: #0d1f1a; color: var(--text); }
 
 .chip {
   display: inline-flex; align-items: center; gap: 7px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-fill);
   border: 1px solid var(--border-dim);
   padding: 6px 12px;
   border-radius: 999px;
@@ -295,7 +333,7 @@ select option { background: #0d1f1a; color: var(--text); }
 
 .bar {
   height: 7px; border-radius: 999px;
-  background: rgba(255, 255, 255, 0.07);
+  background: var(--surface-fill-2);
   overflow: hidden;
 }
 .bar > span {
@@ -360,7 +398,7 @@ select option { background: #0d1f1a; color: var(--text); }
   font-weight: 800;
   letter-spacing: -0.5px;
   line-height: 1;
-  color: #fff;
+  color: var(--text);
 }
 
 /* =========================================================================
@@ -378,7 +416,7 @@ select option { background: #0d1f1a; color: var(--text); }
   background: rgba(248, 113, 113, 0.08);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(248, 113, 113, 0.35);
-  color: #ffd9d9;
+  color: var(--danger-text);
   padding: 14px 20px;
   border-radius: 14px;
   font-size: 0.9rem;
@@ -436,7 +474,7 @@ select option { background: #0d1f1a; color: var(--text); }
 .row-actions { display: flex; gap: 6px; justify-content: flex-end; }
 
 .icon-btn {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-fill);
   border: 1px solid var(--border-dim);
   color: var(--text);
   border-radius: 9px;
@@ -592,7 +630,7 @@ select option { background: #0d1f1a; color: var(--text); }
 /* Tab switcher */
 .auth-tabs {
   display: flex; gap: 4px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-fill-soft);
   border: 1px solid var(--border-dim);
   border-radius: 13px;
   padding: 4px;
@@ -615,7 +653,7 @@ select option { background: #0d1f1a; color: var(--text); }
 .auth-error {
   background: rgba(248, 113, 113, 0.1);
   border: 1px solid rgba(248, 113, 113, 0.3);
-  color: #ffd9d9;
+  color: var(--danger-text);
   padding: 10px 14px;
   border-radius: 10px;
   font-size: 0.85rem;
