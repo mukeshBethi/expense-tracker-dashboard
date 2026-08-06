@@ -1,20 +1,25 @@
 # Expense Tracker Dashboard
 
 A dashboard to log your daily expenses and keep track of them, with real email/password
-sign-in and cloud storage via Firebase (Auth + Firestore). No custom backend server and no
-build step — the Firebase Web SDK is loaded straight from a CDN as ES modules.
+sign-in and cloud storage via Firebase (Auth + Firestore). Built with React and Vite; no
+custom backend server is required.
 
 ## How to run
 
-Because the app now uses ES module imports, open it via a local server rather than
-double-clicking the file:
-
 ```
-npx serve .
+npm install
+npm run dev
 ```
 
 Then open the printed `http://localhost:...` URL, create an account (or sign in), and start
 adding expenses.
+
+To produce an optimized production build (and preview it locally):
+
+```
+npm run build
+npm run preview
+```
 
 ### One-time Firebase setup
 
@@ -26,8 +31,8 @@ The project already points at a Firebase project (`expense-tracker-75c88`, confi
 3. **Firestore → Rules** → paste the rule shown at the top of `firebase-config.js` so each
    user can only read/write their own data.
 
-> First load needs an internet connection to fetch the charting library (Chart.js) and the
-> Firebase SDK from CDNs. See [Offline use](#offline-use) for Chart.js.
+> Chart.js and the Firebase SDK are npm dependencies bundled into the app by Vite (see
+> [Offline use](#offline-use)) — no CDN scripts are loaded at runtime.
 
 ## Features
 
@@ -54,38 +59,37 @@ write your own document.
 
 ## Offline use
 
-The only external dependency is Chart.js, loaded from a CDN in `index.html`:
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-```
-
-To work fully offline, download that file next to the other files (e.g. as `chart.umd.min.js`)
-and change the line to:
-
-```html
-<script src="chart.umd.min.js"></script>
-```
+Chart.js and the Firebase SDK are regular npm dependencies (see `package.json`), bundled into
+the production build by Vite — there are no CDN scripts to swap out. Once `npm run build` has
+produced the `dist/` bundle, the app runs fully from that bundle with no additional downloads
+(the Firebase Auth/Firestore calls themselves still need network access, of course).
 
 ## Deploying to Vercel
 
-No build step is needed — this is deployed as a static site.
+Vercel auto-detects the Vite project — no extra config is needed.
 
 ```
 npm install -g vercel   # one-time
-vercel                  # from this folder; follow the prompts
+vercel --prod           # from this folder; follow the prompts
 ```
 
-Firebase's web config values in `firebase-config.js` (API key, project ID, etc.) are safe to
+Or connect the repo in the Vercel dashboard; it will run `npm run build` and serve the `dist/`
+output automatically on every push.
+
+Firebase's web config values in `src/firebase.js` (API key, project ID, etc.) are safe to
 commit and deploy as-is — they're public client identifiers, not secrets. Access control is
 enforced by the Firestore security rules, not by hiding the config.
 
 ## Files
 
-| File                 | Purpose                                          |
-| -------------------- | ------------------------------------------------- |
-| `index.html`         | Page layout / markup                              |
-| `styles.css`         | Styling (dark dashboard theme)                    |
-| `app.js`             | App logic: auth, Firestore persistence, charts    |
-| `firebase-config.js` | Firebase project config + Auth/Firestore setup    |
-| `README.md`          | This file                                          |
+| File / folder         | Purpose                                              |
+| ---------------------- | ----------------------------------------------------- |
+| `index.html`            | Vite entry HTML, mounts the React app                |
+| `src/main.jsx`          | React entry point                                     |
+| `src/App.jsx`           | Top-level app assembly and layout                     |
+| `src/index.css`         | Styling (dark/light dashboard theme)                  |
+| `src/firebase.js`       | Firebase project config + Auth/Firestore setup        |
+| `src/hooks/`            | `useAuth`, `useExpenseData`, `useTheme`               |
+| `src/components/`       | UI components (form, table, charts, dialogs, etc.)    |
+| `src/lib/`              | Formatting and validation helpers                     |
+| `README.md`             | This file                                             |
