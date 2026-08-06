@@ -15,6 +15,7 @@
   --warn:       #fbbf24;
   --glow:       rgba(16, 185, 129, 0.22);
   --glow-sm:    rgba(16, 185, 129, 0.12);
+  --primary-text: var(--primary-l);   /* AA-safe color for text set in the accent color */
   --shadow:     0 16px 48px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4);
   --radius:     18px;
   --blur:       blur(24px) saturate(1.6);
@@ -34,10 +35,14 @@
   --text: #1a1f36;
   --muted: #5b6178;
   --glass: rgba(255, 255, 255, 0.75);
-  --border: rgba(20, 24, 40, 0.1);
-  --border-dim: rgba(20, 24, 40, 0.06);
+  /* Previously rgba(20,24,40,0.1)/0.06 — too close to --bg (#f5f7fb) to read as a
+     border at all. Solid mid-tone grays (Tailwind gray-300/gray-200) give a clearly
+     visible edge without the harsh look of a near-black line. */
+  --border: #d1d5db;
+  --border-dim: #e5e7eb;
   --primary: #059669;
   --primary-l: #10b981;
+  --primary-text: #047857;   /* --primary-l (#10b981) is only ~2.4:1 on light backgrounds as text; this is ~5.1:1, AA-safe */
   --glow: rgba(16, 185, 129, 0.25);
   --danger: #dc2626;
   --shadow: 0 8px 30px rgba(20, 24, 40, 0.08);
@@ -70,6 +75,13 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Smooth color transition when toggling theme, scoped to themed surfaces only
+   (color/background/border, never layout) so it can't affect positioning. */
+body, .app-header, .card, .auth-card, .chip, .stat-card, .expense-card,
+.confirm-card, .toast, input, select, .btn, .icon-btn, .bar {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
 .expense-cards { display: none; }
@@ -265,7 +277,7 @@ select option { background: var(--option-bg); color: var(--text); }
 }
 .btn-secondary:hover {
   border-color: var(--primary);
-  color: var(--primary-l);
+  color: var(--primary-text);
   background: rgba(16, 185, 129, 0.08);
   box-shadow: 0 4px 20px var(--glow-sm);
 }
@@ -277,7 +289,7 @@ select option { background: var(--option-bg); color: var(--text); }
 }
 .btn-ghost:hover {
   border-color: var(--primary);
-  color: var(--primary-l);
+  color: var(--primary-text);
   background: rgba(16, 185, 129, 0.06);
   box-shadow: 0 4px 18px var(--glow-sm);
 }
@@ -453,7 +465,7 @@ select option { background: var(--option-bg); color: var(--text); }
   letter-spacing: 0.7px;
 }
 .expense-table th.sortable { cursor: pointer; user-select: none; transition: color 0.12s; }
-.expense-table th.sortable:hover { color: var(--primary-l); }
+.expense-table th.sortable:hover { color: var(--primary-text); }
 .expense-table .num { text-align: right; font-variant-numeric: tabular-nums; }
 
 .expense-table tbody tr {
@@ -486,7 +498,7 @@ select option { background: var(--option-bg); color: var(--text); }
 .icon-btn:hover {
   transform: translateY(-2px) scale(1.1);
   border-color: var(--primary);
-  color: var(--primary-l);
+  color: var(--primary-text);
   background: rgba(16, 185, 129, 0.08);
   box-shadow: 0 4px 14px var(--glow-sm);
 }
@@ -520,7 +532,7 @@ select option { background: var(--option-bg); color: var(--text); }
 }
 
 /* Remaining budget column states */
-.remaining-ok   { color: var(--primary-l); font-weight: 600; }
+.remaining-ok   { color: var(--primary-text); font-weight: 600; }
 .remaining-warn { color: var(--warn);      font-weight: 600; }
 .remaining-over { color: var(--danger);    font-weight: 600; }
 
@@ -645,7 +657,7 @@ select option { background: var(--option-bg); color: var(--text); }
 }
 .auth-tab.active {
   background: rgba(16, 185, 129, 0.16);
-  color: var(--primary-l);
+  color: var(--primary-text);
 }
 .auth-tab:hover:not(.active) { color: var(--text); }
 
@@ -720,6 +732,14 @@ select option { background: var(--option-bg); color: var(--text); }
 }
 .btn-sm { padding: 8px 14px; font-size: 0.82rem; }
 
+.theme-toggle-btn {
+  display: grid;
+  place-items: center;
+  padding: 9px;
+  line-height: 0;
+}
+.theme-toggle-btn svg { width: 18px; height: 18px; }
+
 /* =========================================================================
    HOVER INTERACTIONS
    ========================================================================= */
@@ -793,7 +813,7 @@ select:hover:not(:focus) {
 
 /* --- Sort column header hover ------------------------------------------ */
 .expense-table th.sortable:hover {
-  color: var(--primary-l);
+  color: var(--primary-text);
   text-shadow: 0 0 12px rgba(52, 211, 153, 0.4);
 }
 
