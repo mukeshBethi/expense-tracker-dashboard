@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense Tracker Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+</head>
+<body>
+
+  <!-- Auth overlay (shown on load) -->
+  <div id="auth-overlay" class="auth-overlay" hidden>
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="auth-mark">$</span>
+        <h1 class="auth-title">Expense Tracker</h1>
+        <p class="auth-subtitle">Track spending. Stay on budget.</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button type="button" id="auth-tab-signin" class="auth-tab active">Sign In</button>
+        <button type="button" id="auth-tab-signup" class="auth-tab">Create Account</button>
+      </div>
+
+      <p id="auth-error" class="auth-error" hidden></p>
+
+      <form id="auth-form" class="auth-form" autocomplete="on">
+        <div class="field">
+          <label for="auth-email">Email</label>
+          <input type="email" id="auth-email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="auth-password">Password</label>
+          <input type="password" id="auth-password" required minlength="6" autocomplete="current-password" />
+        </div>
+        <button id="auth-submit-btn" class="btn btn-primary auth-submit-btn" type="submit">Sign In</button>
+      </form>
+
+      <p class="auth-footnote">Your data is securely stored in the cloud.</p>
+    </div>
+  </div>
+
+  <!-- ── Main App (hidden until logged in) ─────────────────────────────── -->
+  <header class="app-header" hidden>
+    <div class="brand">
+      <span class="brand-mark">$</span>
+      <h1>Expense Tracker</h1>
+    </div>
+    <div class="header-actions">
+      <label class="currency-picker">
+        Currency
+        <select id="currency-select" title="Display currency">
+          <option value="$">$ USD</option>
+          <option value="€">€ EUR</option>
+          <option value="£">£ GBP</option>
+          <option value="₹">₹ INR</option>
+          <option value="¥">¥ JPY</option>
+          <option value="A$">A$ AUD</option>
+          <option value="C$">C$ CAD</option>
+        </select>
+      </label>
+      <button id="export-btn" class="btn btn-ghost" type="button">⭳ Export CSV</button>
+
+      <!-- Logged-in user info -->
+      <div id="user-section" class="user-section">
+        <span id="user-avatar" class="user-avatar" aria-hidden="true">G</span>
+        <span id="user-email-display" class="user-email">Guest</span>
+        <button id="logout-btn" class="btn btn-ghost btn-sm" type="button">Sign Out</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Budget alert banner -->
+  <div id="alert-banner" class="alert-banner" hidden></div>
+
+  <main class="layout" hidden>
+    <!-- LEFT COLUMN -->
+    <section class="col col-left">
+      <!-- Add expense -->
+      <div class="card">
+        <h2 id="form-title">Add Expense</h2>
+        <form id="expense-form" class="expense-form" autocomplete="off">
+          <input type="hidden" id="edit-id" value="" />
+          <div class="field">
+            <label for="exp-date">Date</label>
+            <input type="date" id="exp-date" required />
+          </div>
+          <div class="field">
+            <label for="exp-amount">Amount</label>
+            <input type="number" id="exp-amount" step="0.01" min="0.01" placeholder="0.00" required />
+          </div>
+          <div class="field">
+            <label for="exp-category">Category</label>
+            <select id="exp-category" required></select>
+          </div>
+          <div class="field">
+            <label for="exp-note">Note <span class="muted">(optional)</span></label>
+            <input type="text" id="exp-note" maxlength="120" placeholder="e.g. Lunch with team" />
+          </div>
+          <div class="form-actions">
+            <button type="submit" id="submit-btn" class="btn btn-primary">Add</button>
+            <button type="button" id="cancel-edit-btn" class="btn btn-ghost" hidden>Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Manage categories -->
+      <div class="card">
+        <h2>Categories</h2>
+        <div id="category-chips" class="chips"></div>
+        <form id="category-form" class="inline-form">
+          <input type="text" id="new-category" maxlength="24" placeholder="Add category…" />
+          <button type="submit" class="btn btn-secondary">Add</button>
+        </form>
+      </div>
+
+      <!-- Budgets -->
+      <div class="card">
+        <h2>Monthly Budgets</h2>
+        <p class="muted small">Set a monthly limit per category. Bars warn at 90% and turn red when over.</p>
+        <div id="budget-list" class="budget-list"></div>
+      </div>
+    </section>
+
+    <!-- RIGHT COLUMN -->
+    <section class="col col-right">
+      <!-- Summary cards -->
+      <div class="summary-grid">
+        <div class="stat-card">
+          <span class="stat-label">Spent this month</span>
+          <span class="stat-value" id="stat-month">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Spent today</span>
+          <span class="stat-value" id="stat-today">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Top category</span>
+          <span class="stat-value" id="stat-top">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Total entries</span>
+          <span class="stat-value" id="stat-count">—</span>
+        </div>
+      </div>
+
+      <!-- Charts -->
+      <div class="charts-grid">
+        <div class="card chart-card">
+          <h2>By Category</h2>
+          <div class="chart-wrap"><canvas id="category-chart"></canvas></div>
+        </div>
+        <div class="card chart-card">
+          <h2>Spending Trend</h2>
+          <div class="chart-wrap"><canvas id="trend-chart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Filters + table -->
+      <div class="card">
+        <div class="table-toolbar">
+          <h2>Expenses</h2>
+          <div class="filters">
+            <select id="filter-category" title="Filter by category">
+              <option value="">All categories</option>
+            </select>
+            <select id="filter-range" title="Filter by date range">
+              <option value="this-month">This month</option>
+              <option value="last-month">Last month</option>
+              <option value="this-year">This year</option>
+              <option value="all">All time</option>
+              <option value="custom">Custom…</option>
+            </select>
+            <input type="date" id="filter-from" class="custom-range" hidden title="From date" />
+            <input type="date" id="filter-to"   class="custom-range" hidden title="To date" />
+            <input type="search" id="filter-search" placeholder="Search notes…" />
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="expense-table">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="date">Date</th>
+                <th>Category</th>
+                <th>Note</th>
+                <th class="sortable num" data-sort="amount">Amount</th>
+                <th class="num">Budget</th>
+                <th class="num">Remaining</th>
+                <th class="actions-col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="expense-tbody"></tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" class="foot-label">Filtered total</td>
+                <td class="num" id="filtered-total">—</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <p id="empty-state" class="empty-state" hidden>No expenses match your filters. Add one on the left to get started.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer" hidden>
+    <span>Data is synced to your account.
+      <button id="clear-all-btn" class="link-btn" type="button">Clear all data</button>
+    </span>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="app.js" type="module"></script>
+</body>
+</html>
