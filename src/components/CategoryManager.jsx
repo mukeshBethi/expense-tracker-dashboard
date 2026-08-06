@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { validateCategoryName } from "../lib/validation.js";
 
-export default function CategoryManager({ categories, expenses, onAddCategory, onRemoveCategory }) {
+export default function CategoryManager({ categories, expenses, onAddCategory, onRequestRemoveCategory }) {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
 
@@ -19,8 +19,8 @@ export default function CategoryManager({ categories, expenses, onAddCategory, o
       setError(`"${cat}" is used by existing expenses and can't be removed.`);
       return;
     }
-    onRemoveCategory(cat);
     setError("");
+    onRequestRemoveCategory(cat);
   }
 
   return (

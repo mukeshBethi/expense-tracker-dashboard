@@ -12,6 +12,7 @@ const DEFAULT_STATE = {
 export function useExpenseData(uid) {
   const [state, setState] = useState(DEFAULT_STATE);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(null);
   const docRef = useRef(null);
 
   useEffect(() => {
@@ -20,10 +21,12 @@ export function useExpenseData(uid) {
       docRef.current = null;
       setState(DEFAULT_STATE);
       setLoading(false);
+      setLoadError(null);
       return;
     }
     docRef.current = doc(db, "users", uid);
     setLoading(true);
+    setLoadError(null);
     getDoc(docRef.current).then(snap => {
       if (cancelled) return;
       const data = snap.exists() ? snap.data() : {};
@@ -34,6 +37,11 @@ export function useExpenseData(uid) {
         expenses: Array.isArray(data.expenses) ? data.expenses : [],
       });
       setLoading(false);
+    }).catch(err => {
+      if (cancelled) return;
+      console.error("Failed to load expense data:", err);
+      setLoadError(err);
+      setLoading(false);
     });
     return () => {
       cancelled = true;
@@ -41,23 +49,23 @@ export function useExpenseData(uid) {
   }, [uid]);
 
   const persistExpenses = useCallback((expenses) => {
-    if (docRef.current) setDoc(docRef.current, { expenses }, { merge: true });
+    if (!docRef.current) return Promise.resolve();
+    return setDoc(docRef.current, { expenses }, { merge: true });
   }, []);
 
   const persistProfile = useCallback((next) => {
-    if (docRef.current) {
-      setDoc(docRef.current, {
-        settings: next.settings,
-        categories: next.categories,
-        budgets: next.budgets,
-      }, { merge: true });
-    }
+    if (!docRef.current) return Promise.resolve();
+    return setDoc(docRef.current, {
+      settings: next.settings,
+      categories: next.categories,
+      budgets: next.budgets,
+    }, { merge: true });
   }, []);
 
   const addExpense = useCallback((expense) => {
     setState(prev => {
       const next = { ...prev, expenses: [...prev.expenses, { id: crypto.randomUUID(), ...expense }] };
-      persistExpenses(next.expenses);
+      persistExpenses(next.expenses).catch(err => console.error("Failed to save expense:", err));
       return next;
     });
   }, [persistExpenses]);
@@ -66,7 +74,7 @@ export function useExpenseData(uid) {
     setState(prev => {
       const expenses = prev.expenses.map(e => (e.id === id ? { ...e, ...patch } : e));
       const next = { ...prev, expenses };
-      persistExpenses(expenses);
+      persistExpenses(expenses).catch(err => console.error("Failed to save expense update:", err));
       return next;
     });
   }, [persistExpenses]);
@@ -75,7 +83,7 @@ export function useExpenseData(uid) {
     setState(prev => {
       const expenses = prev.expenses.filter(e => e.id !== id);
       const next = { ...prev, expenses };
-      persistExpenses(expenses);
+      persistExpenses(expenses).catch(err => console.error("Failed to save expense deletion:", err));
       return next;
     });
   }, [persistExpenses]);
@@ -84,7 +92,7 @@ export function useExpenseData(uid) {
     setState(prev => {
       const categories = [...prev.categories, name];
       const next = { ...prev, categories };
-      persistProfile(next);
+      persistProfile(next).catch(err => console.error("Failed to save category:", err));
       return next;
     });
   }, [persistProfile]);
@@ -95,7 +103,7 @@ export function useExpenseData(uid) {
       const budgets = { ...prev.budgets };
       delete budgets[name];
       const next = { ...prev, categories, budgets };
-      persistProfile(next);
+      persistProfile(next).catch(err => console.error("Failed to save category removal:", err));
       return next;
     });
   }, [persistProfile]);
@@ -107,7 +115,7 @@ export function useExpenseData(uid) {
       if (!value || Number.isNaN(num) || num <= 0) delete budgets[category];
       else budgets[category] = num;
       const next = { ...prev, budgets };
-      persistProfile(next);
+      persistProfile(next).catch(err => console.error("Failed to save budget:", err));
       return next;
     });
   }, [persistProfile]);
@@ -116,7 +124,7 @@ export function useExpenseData(uid) {
     setState(prev => {
       const settings = { ...prev.settings, currency };
       const next = { ...prev, settings };
-      persistProfile(next);
+      persistProfile(next).catch(err => console.error("Failed to save currency setting:", err));
       return next;
     });
   }, [persistProfile]);
@@ -125,10 +133,24 @@ export function useExpenseData(uid) {
     setState(prev => {
       const settings = { ...prev.settings, theme };
       const next = { ...prev, settings };
-      persistProfile(next);
+      persistProfile(next).catch(err => console.error("Failed to save theme setting:", err));
       return next;
     });
   }, [persistProfile]);
 
-  return { state, loading, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setThemePreference };
+  const clearAll = useCallback(() => {
+    setState(prev => {
+      const next = {
+        expenses: [],
+        budgets: {},
+        categories: [...DEFAULT_CATEGORIES],
+        settings: { ...prev.settings },
+      };
+      persistExpenses(next.expenses).catch(err => console.error("Failed to clear expenses:", err));
+      persistProfile(next).catch(err => console.error("Failed to clear profile data:", err));
+      return next;
+    });
+  }, [persistExpenses, persistProfile]);
+
+  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setThemePreference, clearAll };
 }

@@ -23,7 +23,7 @@ function monthKey(iso) { return iso.slice(0, 7); }
 
 export default function App() {
   const { user, authLoading, signIn, signUp, signOutUser, authError, clearAuthError } = useAuth();
-  const { state, loading, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setThemePreference } = useExpenseData(user?.uid);
+  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setThemePreference, clearAll } = useExpenseData(user?.uid);
   const { theme, toggleTheme } = useTheme(state.settings.theme, setThemePreference);
 
   const [filterCategory, setFilterCategory] = useState("");
@@ -31,6 +31,8 @@ export default function App() {
   const [sort, setSort] = useState({ key: "date", dir: "desc" });
   const [editingExpense, setEditingExpense] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
+  const [confirmRemoveCategory, setConfirmRemoveCategory] = useState(null);
+  const [confirmClearAll, setConfirmClearAll] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
   const dismissToast = useCallback(() => setToastMessage(null), []);
@@ -78,7 +80,11 @@ export default function App() {
   if (!user) {
     return <AuthScreen onSignIn={signIn} onSignUp={signUp} authError={authError} clearAuthError={clearAuthError} />;
   }
-  if (loading) return <p className="loading-label">Loading your data…</p>;
+  if (loading) {
+    return loadError
+      ? <p className="loading-error">Couldn't load your data. Please refresh the page.</p>
+      : <p className="loading-label">Loading your data…</p>;
+  }
 
   return (
     <div>
@@ -109,7 +115,7 @@ export default function App() {
               categories={state.categories}
               expenses={state.expenses}
               onAddCategory={addCategory}
-              onRemoveCategory={removeCategory}
+              onRequestRemoveCategory={setConfirmRemoveCategory}
             />
           </div>
           <div className="card">
@@ -153,12 +159,29 @@ export default function App() {
           </div>
         </section>
       </main>
+      <footer className="app-footer">
+        <button type="button" className="link-btn" onClick={() => setConfirmClearAll(true)}>
+          Clear all data
+        </button>
+      </footer>
       <Toast message={toastMessage} onDismiss={dismissToast} />
       <ConfirmDialog
         open={confirmDeleteId !== null}
         message="Delete this expense? This cannot be undone."
         onConfirm={() => { deleteExpense(confirmDeleteId); setConfirmDeleteId(null); setToastMessage("Expense deleted."); }}
         onCancel={() => setConfirmDeleteId(null)}
+      />
+      <ConfirmDialog
+        open={confirmRemoveCategory !== null}
+        message={confirmRemoveCategory ? `Remove category "${confirmRemoveCategory}"? This cannot be undone.` : ""}
+        onConfirm={() => { removeCategory(confirmRemoveCategory); setConfirmRemoveCategory(null); setToastMessage("Category removed."); }}
+        onCancel={() => setConfirmRemoveCategory(null)}
+      />
+      <ConfirmDialog
+        open={confirmClearAll}
+        message="Clear all expenses, categories, and budgets? This cannot be undone."
+        onConfirm={() => { clearAll(); setConfirmClearAll(false); setToastMessage("All data cleared."); }}
+        onCancel={() => setConfirmClearAll(false)}
       />
     </div>
   );
