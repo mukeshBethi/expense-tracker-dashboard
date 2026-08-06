@@ -15,7 +15,9 @@ export function useExpenseData(uid) {
   const docRef = useRef(null);
 
   useEffect(() => {
+    let cancelled = false;
     if (!uid) {
+      docRef.current = null;
       setState(DEFAULT_STATE);
       setLoading(false);
       return;
@@ -23,6 +25,7 @@ export function useExpenseData(uid) {
     docRef.current = doc(db, "users", uid);
     setLoading(true);
     getDoc(docRef.current).then(snap => {
+      if (cancelled) return;
       const data = snap.exists() ? snap.data() : {};
       setState({
         settings: { currency: "$", theme: "dark", ...(data.settings || {}) },
@@ -32,6 +35,9 @@ export function useExpenseData(uid) {
       });
       setLoading(false);
     });
+    return () => {
+      cancelled = true;
+    };
   }, [uid]);
 
   const persistExpenses = useCallback((expenses) => {
