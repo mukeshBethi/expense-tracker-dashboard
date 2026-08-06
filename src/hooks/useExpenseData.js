@@ -6,7 +6,7 @@ const DEFAULT_STATE = {
   expenses: [],
   budgets: {},
   categories: [...DEFAULT_CATEGORIES],
-  settings: { currency: "$", theme: "dark" },
+  settings: { currency: "$", theme: "dark", totalBudget: 0 },
 };
 
 export function useExpenseData(uid) {
@@ -31,7 +31,7 @@ export function useExpenseData(uid) {
       if (cancelled) return;
       const data = snap.exists() ? snap.data() : {};
       setState({
-        settings: { currency: "$", theme: "dark", ...(data.settings || {}) },
+        settings: { currency: "$", theme: "dark", totalBudget: 0, ...(data.settings || {}) },
         categories: Array.isArray(data.categories) && data.categories.length ? data.categories : [...DEFAULT_CATEGORIES],
         budgets: data.budgets || {},
         expenses: Array.isArray(data.expenses) ? data.expenses : [],
@@ -129,6 +129,17 @@ export function useExpenseData(uid) {
     });
   }, [persistProfile]);
 
+  const setTotalBudget = useCallback((value) => {
+    setState(prev => {
+      const num = parseFloat(value);
+      const totalBudget = !value || Number.isNaN(num) || num <= 0 ? 0 : num;
+      const settings = { ...prev.settings, totalBudget };
+      const next = { ...prev, settings };
+      persistProfile(next).catch(err => console.error("Failed to save total budget:", err));
+      return next;
+    });
+  }, [persistProfile]);
+
   const setThemePreference = useCallback((theme) => {
     setState(prev => {
       const settings = { ...prev.settings, theme };
@@ -152,5 +163,5 @@ export function useExpenseData(uid) {
     });
   }, [persistExpenses, persistProfile]);
 
-  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setThemePreference, clearAll };
+  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setTotalBudget, setThemePreference, clearAll };
 }

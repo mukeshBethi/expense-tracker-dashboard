@@ -23,7 +23,7 @@ function monthKey(iso) { return iso.slice(0, 7); }
 
 export default function App() {
   const { user, authLoading, signIn, signUp, signOutUser, authError, clearAuthError } = useAuth();
-  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setThemePreference, clearAll } = useExpenseData(user?.uid);
+  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setTotalBudget, setThemePreference, clearAll } = useExpenseData(user?.uid);
   const { theme, toggleTheme } = useTheme(state.settings.theme, setThemePreference);
 
   const [filterCategory, setFilterCategory] = useState("");
@@ -127,6 +127,8 @@ export default function App() {
               expensesThisMonth={expensesThisMonth}
               currency={state.settings.currency}
               onSetBudget={setBudget}
+              totalBudget={state.settings.totalBudget || 0}
+              onSetTotalBudget={setTotalBudget}
             />
           </div>
         </section>

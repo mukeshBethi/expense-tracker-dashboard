@@ -30,3 +30,27 @@ export function validateCategoryName(name, existingCategories) {
   }
   return null;
 }
+
+export function validateAllocation(newAmount, category, budgets, totalBudget) {
+  if (!(totalBudget > 0)) return null;
+  let othersSum = 0;
+  for (const [cat, val] of Object.entries(budgets)) {
+    if (cat === category) continue;
+    othersSum += Number(val) || 0;
+  }
+  const projected = othersSum + (Number(newAmount) || 0);
+  if (projected > totalBudget) {
+    return { overage: projected - totalBudget };
+  }
+  return null;
+}
+
+export function validateTotalBudget(newTotal, budgets) {
+  if (!(newTotal > 0)) return null;
+  let allocated = 0;
+  for (const val of Object.values(budgets)) allocated += Number(val) || 0;
+  if (newTotal < allocated) {
+    return { allocated };
+  }
+  return null;
+}
