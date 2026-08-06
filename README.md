@@ -24,12 +24,25 @@ npm run preview
 ### One-time Firebase setup
 
 The project already points at a Firebase project (`expense-tracker-75c88`, config in
-`firebase-config.js`). Before first use, in the [Firebase Console](https://console.firebase.google.com):
+`src/firebase.js`). Before first use, in the [Firebase Console](https://console.firebase.google.com):
 
 1. **Authentication → Sign-in method** → enable **Email/Password**.
 2. **Firestore Database** → create a database (production mode).
-3. **Firestore → Rules** → paste the rule shown at the top of `firebase-config.js` so each
-   user can only read/write their own data.
+3. **Firestore → Rules** → paste the following rule so each user can only read/write their
+   own data (the app stores everything in a single document at `users/{uid}`, not a
+   subcollection):
+
+   ```
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /users/{userId} {
+         allow read, write: if request.auth != null
+                            && request.auth.uid == userId;
+       }
+     }
+   }
+   ```
 
 > Chart.js and the Firebase SDK are npm dependencies bundled into the app by Vite (see
 > [Offline use](#offline-use)) — no CDN scripts are loaded at runtime.
