@@ -1,12 +1,26 @@
+import { useState } from "react";
 import { validateAmount } from "../lib/validation.js";
 import { formatMoney } from "../lib/format.js";
 
 export default function BudgetList({ categories, budgets, expensesThisMonth, currency, onSetBudget }) {
+  const [errors, setErrors] = useState({});
   const spentByCat = {};
   for (const e of expensesThisMonth) spentByCat[e.category] = (spentByCat[e.category] || 0) + e.amount;
 
   function handleChange(category, rawValue) {
-    if (rawValue && validateAmount(parseFloat(rawValue))) return; // silently ignore invalid partial input
+    if (rawValue) {
+      const err = validateAmount(parseFloat(rawValue));
+      if (err) {
+        setErrors(prev => ({ ...prev, [category]: err }));
+        return;
+      }
+    }
+    setErrors(prev => {
+      if (!prev[category]) return prev;
+      const next = { ...prev };
+      delete next[category];
+      return next;
+    });
     onSetBudget(category, rawValue);
   }
 
@@ -25,6 +39,7 @@ export default function BudgetList({ categories, budgets, expensesThisMonth, cur
                      defaultValue={limit > 0 ? limit : ""}
                      onBlur={e => handleChange(c, e.target.value)} />
             </div>
+            {errors[c] && <p className="field-error">{errors[c]}</p>}
             <div className={`bar ${cls}`}><span style={{ width: `${pct}%` }} /></div>
             <div className="budget-meta">
               {limit > 0 ? `${formatMoney(spent, currency)} of ${formatMoney(limit, currency)}` : `${formatMoney(spent, currency)} spent · no budget set`}
