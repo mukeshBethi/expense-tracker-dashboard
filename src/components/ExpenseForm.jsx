@@ -23,6 +23,18 @@ export default function ExpenseForm({ categories, onSubmit, editingExpense, onCa
     }
   }, [editingExpense]);
 
+  // If the currently-selected category disappears from the list (e.g. it was
+  // removed via CategoryManager while unused and this form was open), fall back
+  // to the first available category instead of leaving a phantom selection.
+  // Skip this while editing an expense so we don't clobber the just-applied
+  // pre-fill from the effect above on the same render pass.
+  useEffect(() => {
+    if (editingExpense) return;
+    if (category && !categories.includes(category)) {
+      setCategory(categories[0] || "");
+    }
+  }, [categories, category, editingExpense]);
+
   function resetForm() {
     setDate(todayISO());
     setAmountDisplay("");

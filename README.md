@@ -54,7 +54,7 @@ The project already points at a Firebase project (`expense-tracker-75c88`, confi
 - **Filtering** — by category, by date range (this month / last month / this year / all / custom),
   and free-text search on notes. Click the **Date** or **Amount** column headers to sort.
 - **Summary cards** — spent this month, spent today, top category, total entries.
-- **Charts** — spending by category (doughnut) and a spending trend (bar, by day or month).
+- **Charts** — spending by category (doughnut) and a spending trend (bar, by day).
   Charts reflect whatever filter is active.
 - **Monthly budgets & alerts** — set a limit per category. Progress bars turn amber at 90%
   and red when over; a banner at the top warns about any category that's over budget this month.
