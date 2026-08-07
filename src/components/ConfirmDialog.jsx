@@ -6,11 +6,11 @@ export default function ConfirmDialog({ open, message, onConfirm, onCancel }) {
         <p className="text-sm text-text mb-5">{message}</p>
         <div className="flex gap-3">
           <button type="button" onClick={onConfirm}
-                  className="flex-1 bg-red-600 text-white hover:bg-red-700 transition-colors rounded-pill px-4 py-2.5 text-sm font-semibold">
+                  className="flex-1 bg-red-600 text-white hover:bg-red-700 transition-colors rounded-pill px-4 py-2.5 text-sm font-semibold cursor-pointer">
             Confirm
           </button>
           <button type="button" onClick={onCancel}
-                  className="flex-1 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-4 py-2.5 text-sm font-medium transition-colors">
+                  className="flex-1 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer">
             Cancel
           </button>
         </div>

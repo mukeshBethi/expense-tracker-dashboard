@@ -67,10 +67,10 @@ export default function ExpenseTable({ expenses, budgets, expensesThisMonth, cur
                 <td className={`px-3 py-2.5 text-right tabular-nums ${remainingClass}`}>{limit > 0 ? formatMoney(remaining, currency) : "—"}</td>
                 <td className="px-3 py-2.5 text-right">
                   <div className="flex justify-end gap-1">
-                    <button className="p-2 rounded-lg hover:bg-surface text-muted hover:text-text transition-colors" onClick={() => onEdit(e)} aria-label="Edit expense">
+                    <button className="p-2 rounded-lg hover:bg-surface text-muted hover:text-text transition-colors cursor-pointer" onClick={() => onEdit(e)} aria-label="Edit expense">
                       <Pencil className="w-4 h-4" />
                     </button>
-                    <button className="p-2 rounded-lg hover:bg-surface text-muted hover:text-danger transition-colors" onClick={() => onDelete(e.id)} aria-label="Delete expense">
+                    <button className="p-2 rounded-lg hover:bg-surface text-muted hover:text-danger transition-colors cursor-pointer" onClick={() => onDelete(e.id)} aria-label="Delete expense">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -94,10 +94,10 @@ export default function ExpenseTable({ expenses, budgets, expensesThisMonth, cur
               {e.note && <span className="text-xs text-muted truncate max-w-[140px]">{e.note}</span>}
             </div>
             <div className="flex gap-2">
-              <button className="flex-1 inline-flex items-center justify-center gap-1.5 p-2 rounded-lg bg-surface text-text text-xs font-medium hover:bg-surface/70 transition-colors" onClick={() => onEdit(e)}>
+              <button className="flex-1 inline-flex items-center justify-center gap-1.5 p-2 rounded-lg bg-surface text-text text-xs font-medium hover:bg-surface/70 transition-colors cursor-pointer" onClick={() => onEdit(e)}>
                 <Pencil className="w-3.5 h-3.5" /> Edit
               </button>
-              <button className="flex-1 inline-flex items-center justify-center gap-1.5 p-2 rounded-lg bg-surface text-danger text-xs font-medium hover:bg-surface/70 transition-colors" onClick={() => onDelete(e.id)}>
+              <button className="flex-1 inline-flex items-center justify-center gap-1.5 p-2 rounded-lg bg-surface text-danger text-xs font-medium hover:bg-surface/70 transition-colors cursor-pointer" onClick={() => onDelete(e.id)}>
                 <Trash2 className="w-3.5 h-3.5" /> Delete
               </button>
             </div>

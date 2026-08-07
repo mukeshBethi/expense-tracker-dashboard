@@ -94,12 +94,12 @@ export default function ExpenseForm({ categories, onSubmit, editingExpense, onCa
                className="w-full bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
       </div>
       <div className="flex gap-3">
-        <button type="submit" className="flex-1 bg-primary text-white hover:bg-primary-text transition-colors rounded-pill px-4 py-2.5 text-sm font-semibold">
+        <button type="submit" className="flex-1 bg-primary text-white hover:bg-primary-text transition-colors rounded-pill px-4 py-2.5 text-sm font-semibold cursor-pointer">
           {editingExpense ? "Save" : "Add"}
         </button>
         {editingExpense && (
           <button type="button" onClick={() => { onCancelEdit(); resetForm(); }}
-                  className="flex-1 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-4 py-2.5 text-sm font-medium transition-colors">
+                  className="flex-1 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer">
             Cancel
           </button>
         )}

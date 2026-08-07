@@ -9,7 +9,7 @@ export default function Header({ email, currency, theme, onCurrencyChange, onTog
       </div>
       <div className="flex items-center gap-2 sm:gap-3">
         <button
-          className="p-2.5 rounded-pill hover:bg-surface-2 text-muted hover:text-text transition-colors"
+          className="p-2.5 rounded-pill hover:bg-surface-2 text-muted hover:text-text transition-colors cursor-pointer"
           onClick={onToggleTheme}
           aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
           title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
@@ -28,7 +28,7 @@ export default function Header({ email, currency, theme, onCurrencyChange, onTog
           <option value="₹">₹ INR</option>
         </select>
         <button
-          className="inline-flex items-center gap-1.5 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-3.5 py-2 text-sm font-medium transition-colors"
+          className="inline-flex items-center gap-1.5 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-3.5 py-2 text-sm font-medium transition-colors cursor-pointer"
           onClick={onExport}
           aria-label="Export CSV"
           title="Export CSV"
@@ -41,7 +41,7 @@ export default function Header({ email, currency, theme, onCurrencyChange, onTog
           </span>
           <span className="hidden md:inline text-sm text-muted max-w-[160px] truncate">{email}</span>
           <button
-            className="p-2 rounded-pill hover:bg-surface-2 text-muted hover:text-text transition-colors"
+            className="p-2 rounded-pill hover:bg-surface-2 text-muted hover:text-text transition-colors cursor-pointer"
             onClick={onSignOut}
             aria-label="Sign out"
             title="Sign out"

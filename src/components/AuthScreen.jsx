@@ -36,14 +36,14 @@ export default function AuthScreen({ onSignIn, onSignUp, authError, clearAuthErr
         <div className="inline-flex w-full bg-surface-2 rounded-pill p-1 mb-5">
           <button
             type="button"
-            className={`flex-1 rounded-pill px-4 py-2 text-sm font-medium transition-colors ${mode === "signin" ? "bg-surface text-text shadow-soft" : "text-muted hover:text-text"}`}
+            className={`flex-1 rounded-pill px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${mode === "signin" ? "bg-surface text-text shadow-soft" : "text-muted hover:text-text"}`}
             onClick={() => switchMode("signin")}
           >
             Sign In
           </button>
           <button
             type="button"
-            className={`flex-1 rounded-pill px-4 py-2 text-sm font-medium transition-colors ${mode === "signup" ? "bg-surface text-text shadow-soft" : "text-muted hover:text-text"}`}
+            className={`flex-1 rounded-pill px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${mode === "signup" ? "bg-surface text-text shadow-soft" : "text-muted hover:text-text"}`}
             onClick={() => switchMode("signup")}
           >
             Create Account
@@ -67,7 +67,7 @@ export default function AuthScreen({ onSignIn, onSignUp, authError, clearAuthErr
                    className="w-full bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
           </div>
           <button type="submit" disabled={submitting}
-                  className="w-full bg-primary text-white hover:bg-primary-text transition-colors rounded-pill px-4 py-2.5 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed">
+                  className="w-full bg-primary text-white hover:bg-primary-text transition-colors rounded-pill px-4 py-2.5 text-sm font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
             {mode === "signin" ? "Sign In" : "Create Account"}
           </button>
         </form>

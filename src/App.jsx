@@ -177,7 +177,7 @@ export default function App() {
         </section>
       </main>
       <footer className="app-footer">
-        <button type="button" className="link-btn" onClick={() => setConfirmClearAll(true)}>
+        <button type="button" className="link-btn cursor-pointer" onClick={() => setConfirmClearAll(true)}>
           Clear all data
         </button>
       </footer>

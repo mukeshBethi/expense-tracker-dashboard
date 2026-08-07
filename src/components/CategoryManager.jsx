@@ -31,7 +31,7 @@ export default function CategoryManager({ categories, expenses, onAddCategory, o
           <span className="inline-flex items-center gap-1.5 bg-surface-2 text-text text-sm rounded-pill pl-3 pr-2 py-1.5" key={c}>
             {c}
             <button type="button" aria-label={`Remove ${c}`} title={`Remove ${c}`} onClick={() => handleRemove(c)}
-                    className="p-0.5 rounded-pill hover:bg-surface text-muted hover:text-danger transition-colors">
+                    className="p-0.5 rounded-pill hover:bg-surface text-muted hover:text-danger transition-colors cursor-pointer">
               <X className="w-3.5 h-3.5" />
             </button>
           </span>
@@ -42,7 +42,7 @@ export default function CategoryManager({ categories, expenses, onAddCategory, o
         <input type="text" maxLength={24} placeholder="Add category…"
                value={name} onChange={e => setName(e.target.value)}
                className="flex-1 bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
-        <button type="submit" className="bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-4 py-2.5 text-sm font-medium transition-colors">
+        <button type="submit" className="bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer">
           Add
         </button>
       </form>
