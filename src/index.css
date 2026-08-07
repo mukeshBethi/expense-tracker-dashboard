@@ -4,23 +4,6 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
-  --color-bg:            var(--bg);
-  --color-text:          var(--text);
-  --color-muted:         var(--muted);
-  --color-primary:       var(--primary);
-  --color-primary-light: var(--primary-l);
-  --color-primary-text:  var(--primary-text);
-  --color-danger:        var(--danger);
-  --color-warn:          var(--warn);
-  --color-border:        var(--border);
-  --color-border-dim:    var(--border-dim);
-  --color-surface:   var(--surface-1);
-  --color-surface-2: var(--surface-2);
-  --shadow-soft:      var(--shadow-soft);
-  --radius-card:      var(--radius-card);
-  --radius-pill:      var(--radius-pill);
-  --radius-input:     var(--radius-input);
-
   /* ── Procura design system tokens (pr- prefixed) ── */
   --color-pr-page: var(--pr-page);
   --color-pr-card: var(--pr-card);
@@ -55,48 +38,7 @@
   --radius-pr-pill: var(--pr-radius-pill);
 }
 
-:root {
-  /* ── Obsidian & Emerald palette ── */
-  --bg:         #020406;
-  --bg-soft:    rgba(255, 255, 255, 0.04);
-  --glass:      rgba(255, 255, 255, 0.035);
-  --glass-2:    rgba(255, 255, 255, 0.055);
-  --border:     rgba(52, 211, 153, 0.14);
-  --border-dim: rgba(255, 255, 255, 0.07);
-  --text:       #f5f5f5;
-  --muted:      #8a9aaa;
-  --primary:    #10b981;    /* emerald */
-  --primary-d:  #059669;
-  --primary-l:  #34d399;    /* mint */
-  --danger:     #f87171;
-  --warn:       #fbbf24;
-  --glow:       rgba(16, 185, 129, 0.22);
-  --glow-sm:    rgba(16, 185, 129, 0.12);
-  --primary-text: var(--primary-l);   /* AA-safe color for text set in the accent color */
-  --shadow:     0 16px 48px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.4);
-  --radius:     18px;
-  --blur:       blur(24px) saturate(1.6);
-
-  /* ── Surfaces that used to be hardcoded white-based translucent fills ── */
-  --header-bg:         rgba(2, 4, 6, 0.72);
-  --surface-fill:       rgba(255, 255, 255, 0.05);
-  --surface-fill-soft:  rgba(255, 255, 255, 0.04);
-  --surface-fill-2:     rgba(255, 255, 255, 0.065);
-  --placeholder-color:  rgba(255, 255, 255, 0.25);
-  --option-bg:          #0d1f1a;
-  --danger-text:        #ffd9d9;
-
-  /* ── Surface tokens & shadow/radius scale for the dashboard redesign ── */
-  --surface-1: #12151a;
-  --surface-2: #1a1e25;
-  --shadow-soft: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 20px rgba(0, 0, 0, 0.45);
-  --radius-card: 16px;
-  --radius-pill: 999px;
-  --radius-input: 10px;
-}
-
-/* ── Procura design system tokens (prefixed pr- to avoid colliding with
-   the existing emerald tokens above) — dark values, default ── */
+/* ── Procura design system tokens — dark values, default ── */
 :root {
   --pr-navy-100: #EEF1F8; --pr-navy-250: #C5CEDE; --pr-navy-400: #8A9BB8; --pr-navy-550: #4A6290; --pr-navy-700: #1B2B4B; --pr-navy-850: #070C17;
   --pr-blue-100: #E9EFFF; --pr-blue-250: #B9CDFF; --pr-blue-400: #789BFF; --pr-blue-550: #2D63EA; --pr-blue-700: #1E40AF; --pr-blue-850: #172B59;
@@ -133,45 +75,7 @@
 }
 
 :root[data-theme="light"] {
-  --bg: #f5f7fb;
-  --text: #1a1f36;
-  --muted: #5b6178;
-  --glass: rgba(255, 255, 255, 0.75);
-  /* Previously rgba(20,24,40,0.1)/0.06 — too close to --bg (#f5f7fb) to read as a
-     border at all. Solid mid-tone grays (Tailwind gray-300/gray-200) give a clearly
-     visible edge without the harsh look of a near-black line. */
-  --border: #d1d5db;
-  --border-dim: #e5e7eb;
-  --primary: #059669;
-  --primary-l: #10b981;
-  --primary-text: #047857;   /* --primary-l (#10b981) is only ~2.4:1 on light backgrounds as text; this is ~5.1:1, AA-safe */
-  --glow: rgba(16, 185, 129, 0.25);
-  --danger: #dc2626;
-  --shadow: 0 8px 30px rgba(20, 24, 40, 0.08);
-
-  /* --warn (#fbbf24) is a pale amber meant for dark backgrounds; too low-contrast
-     as text on a light card, so darken it for light mode. --glow-sm is a decorative
-     shadow color used the same way in both themes, but nudged up slightly here so it
-     still reads against the lighter card surfaces. */
-  --warn:     #b45309;
-  --glow-sm:  rgba(16, 185, 129, 0.18);
-
-  /* Surfaces: the dark theme's "white tint on near-black" fills need to become
-     "dark tint on light" fills, not stay white (which disappears on a light card). */
-  --header-bg:          rgba(245, 247, 251, 0.75);
-  --surface-fill:       rgba(20, 24, 40, 0.045);
-  --surface-fill-soft:  rgba(20, 24, 40, 0.035);
-  --surface-fill-2:     rgba(20, 24, 40, 0.055);
-  --placeholder-color:  rgba(26, 31, 54, 0.35);
-  --option-bg:          #ffffff;
-  --danger-text:        #b91c1c;
-
-  /* ── Surface tokens & shadow scale (light) ── */
-  --surface-1: #ffffff;
-  --surface-2: #f3f4f7;
-  --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 20px rgba(15, 23, 42, 0.06);
-
-  /* ── Procura design system tokens (pr- prefixed) — light overrides ── */
+  /* ── Procura design system tokens — light overrides ── */
   --pr-page: #F4F5F7;
   --pr-card: #FFFFFF;
   --pr-subtle: #F4F7FC;
@@ -222,31 +126,6 @@ html, body {
 select option { background: var(--pr-card); color: var(--pr-primary); }
 
 /* =========================================================================
-   BUTTONS
-   ========================================================================= */
-.link-btn {
-  background: none; border: none; color: var(--danger);
-  cursor: pointer; text-decoration: underline; font: inherit; padding: 0;
-}
-
-/* =========================================================================
-   CHARTS
-   ========================================================================= */
-.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-
-/* =========================================================================
-   MISC
-   ========================================================================= */
-.app-footer {
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.82rem;
-  padding: 22px;
-  border-top: 1px solid var(--border-dim);
-  margin-top: 10px;
-}
-
-/* =========================================================================
    HOVER INTERACTIONS
    ========================================================================= */
 
@@ -264,23 +143,10 @@ select:hover:not(:focus) {
   background: var(--pr-subtle);
 }
 
-/* --- Link button hover ------------------------------------------------- */
-.link-btn {
-  transition: color 0.15s, opacity 0.15s;
-}
-.link-btn:hover { opacity: 0.8; }
-
 /* --- Reduce motion for accessibility ----------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
-}
-
-/* =========================================================================
-   RESPONSIVE
-   ========================================================================= */
-@media (max-width: 1100px) {
-  .charts-grid { grid-template-columns: 1fr; }
 }
