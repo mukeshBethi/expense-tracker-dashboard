@@ -90,7 +90,7 @@ export default function ExpenseTable({ expenses, budgets, expensesThisMonth, cur
               <span className="text-sm font-semibold tabular-nums text-text">{formatMoney(e.amount, currency)}</span>
             </div>
             <div className="flex items-center justify-between mb-3">
-              <span className="inline-flex items-center bg-surface text-text text-xs rounded-pill px-2.5 py-1 min-w-0 truncate">{e.category}</span>
+              <span className="inline-flex items-center bg-surface text-text text-xs rounded-pill px-2.5 py-1 min-w-0"><span className="truncate">{e.category}</span></span>
               {e.note && <span className="text-xs text-muted truncate max-w-[140px]">{e.note}</span>}
             </div>
             <div className="flex gap-2">

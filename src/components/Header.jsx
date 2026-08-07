@@ -2,12 +2,12 @@ import { Sun, Moon, Download, LogOut } from "lucide-react";
 
 export default function Header({ email, currency, theme, onCurrencyChange, onToggleTheme, onExport, onSignOut }) {
   return (
-    <header className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 sm:px-6 lg:px-9 py-4 bg-surface/80 backdrop-blur-md border-b border-border-dim">
+    <header className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 sm:px-6 lg:px-9 py-3 sm:py-4 bg-surface/80 backdrop-blur-md border-b border-border-dim">
       <div className="flex items-center gap-3">
         <span className="grid place-items-center w-9 h-9 rounded-input bg-primary text-white font-bold text-lg">$</span>
         <h1 className="text-lg font-semibold text-text">Expense Tracker</h1>
       </div>
-      <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 ml-auto">
         <button
           className="p-2.5 rounded-pill hover:bg-surface-2 text-muted hover:text-text transition-colors cursor-pointer"
           onClick={onToggleTheme}
