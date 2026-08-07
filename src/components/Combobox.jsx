@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import { ChevronDown, Search } from "lucide-react";
 
 export default function Combobox({ options, value, onChange, placeholder = "Select…", allowClear = false, clearLabel = "All" }) {
@@ -7,9 +7,10 @@ export default function Combobox({ options, value, onChange, placeholder = "Sele
   const [highlightedIndex, setHighlightedIndex] = useState(0);
   const containerRef = useRef(null);
   const inputRef = useRef(null);
+  const listboxId = useId();
 
   const allOptions = allowClear ? ["", ...options] : options;
-  const labelFor = (opt) => (opt === "" ? clearLabel : opt);
+  const labelFor = (opt) => (opt === "" && allowClear ? clearLabel : opt);
   const filtered = query
     ? allOptions.filter(opt => labelFor(opt).toLowerCase().includes(query.toLowerCase()))
     : allOptions;
@@ -58,7 +59,7 @@ export default function Combobox({ options, value, onChange, placeholder = "Sele
           type="text"
           role="combobox"
           aria-expanded={open}
-          aria-controls="combobox-listbox"
+          aria-controls={listboxId}
           placeholder={placeholder}
           value={displayValue}
           onFocus={() => { setOpen(true); setHighlightedIndex(0); }}
@@ -69,7 +70,7 @@ export default function Combobox({ options, value, onChange, placeholder = "Sele
         {open ? <Search className="w-4 h-4 text-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" /> : <ChevronDown className="w-4 h-4 text-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />}
       </div>
       {open && (
-        <ul id="combobox-listbox" role="listbox" className="absolute z-10 mt-1 w-full max-h-56 overflow-y-auto bg-surface shadow-soft rounded-input border border-border-dim py-1">
+        <ul id={listboxId} role="listbox" className="absolute z-10 mt-1 w-full max-h-56 overflow-y-auto bg-surface shadow-soft rounded-input border border-border-dim py-1">
           {filtered.length === 0 && <li className="px-3 py-2 text-sm text-muted">No matches</li>}
           {filtered.map((opt, i) => (
             <li key={opt || "__clear__"} role="option" aria-selected={opt === value}
