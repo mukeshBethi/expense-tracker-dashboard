@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useId } from "react";
 import { ChevronDown, Search } from "lucide-react";
 
-export default function Combobox({ options, value, onChange, placeholder = "Select…", allowClear = false, clearLabel = "All" }) {
+export default function Combobox({ id, options, value, onChange, placeholder = "Select…", allowClear = false, clearLabel = "All" }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -56,6 +56,7 @@ export default function Combobox({ options, value, onChange, placeholder = "Sele
       <div className="relative">
         <input
           ref={inputRef}
+          id={id}
           type="text"
           role="combobox"
           aria-expanded={open}

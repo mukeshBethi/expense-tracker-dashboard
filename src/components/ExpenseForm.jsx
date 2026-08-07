@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { validateDate, validateAmount, validateCategory } from "../lib/validation.js";
 import { formatAmountInput, parseAmountInput } from "../lib/format.js";
+import Combobox from "./Combobox.jsx";
 
 function todayISO() {
   const d = new Date();
@@ -81,10 +82,7 @@ export default function ExpenseForm({ categories, onSubmit, editingExpense, onCa
       </div>
       <div>
         <label htmlFor="exp-category" className="text-xs font-semibold uppercase tracking-wide text-muted mb-1.5 block">Category</label>
-        <select id="exp-category" value={category} onChange={e => setCategory(e.target.value)}
-                className="w-full bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
-          {categories.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
+        <Combobox id="exp-category" options={categories} value={category} onChange={setCategory} placeholder="Select a category…" />
         {errors.category && <p className="text-xs text-danger mt-1">{errors.category}</p>}
       </div>
       <div>
