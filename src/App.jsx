@@ -12,7 +12,7 @@ import ExpensesPage from "./pages/ExpensesPage.jsx";
 import BudgetsPage from "./pages/BudgetsPage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
 import AnalyticsPage from "./pages/AnalyticsPage.jsx";
-import ComingSoonPage from "./pages/ComingSoonPage.jsx";
+import SettingsPage from "./pages/SettingsPage.jsx";
 
 function todayISO() {
   const d = new Date();
@@ -22,7 +22,7 @@ function monthKey(iso) { return iso.slice(0, 7); }
 
 export default function App() {
   const { user, authLoading, signIn, signUp, signOutUser, authError, clearAuthError } = useAuth();
-  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setTotalBudget, setThemePreference } = useExpenseData(user?.uid);
+  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, setTotalBudget, setThemePreference } = useExpenseData(user?.uid);
   const { theme, toggleTheme } = useTheme(state.settings.theme, setThemePreference);
 
   const [editingExpense, setEditingExpense] = useState(null);
@@ -103,6 +103,7 @@ export default function App() {
   const budgetsProps = { state, expensesThisMonth, setBudget, setTotalBudget };
   const categoriesProps = { state, addCategory, removeCategory, toastMessage, dismissToast, setToastMessage };
   const analyticsProps = { state, theme, expensesThisMonth };
+  const settingsProps = { state, theme, toggleTheme, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, handleExport };
 
   const monthTotalRaw = expensesThisMonth.reduce((sum, e) => sum + e.amount, 0);
   const totalBudget = state.settings.totalBudget || 0;
@@ -116,7 +117,6 @@ export default function App() {
       onSignOut={signOutUser}
       theme={theme}
       toggleTheme={toggleTheme}
-      onExport={handleExport}
       onOpenAdd={() => openExpenseModal(null)}
       monthTotal={formatMoney(monthTotalRaw, state.settings.currency)}
       totalBudgetShort={formatMoney(totalBudget, state.settings.currency)}
@@ -128,7 +128,7 @@ export default function App() {
         <Route path="/budgets" element={<BudgetsPage {...budgetsProps} />} />
         <Route path="/analytics" element={<AnalyticsPage {...analyticsProps} />} />
         <Route path="/categories" element={<CategoriesPage {...categoriesProps} />} />
-        <Route path="/settings" element={<ComingSoonPage title="Settings" />} />
+        <Route path="/settings" element={<SettingsPage {...settingsProps} />} />
       </Routes>
     </Shell>
   );
