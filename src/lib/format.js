@@ -7,12 +7,15 @@ export function formatMoney(amount, currency) {
   })}`;
 }
 
+const MAX_INT_DIGITS = 10;
+
 export function formatAmountInput(rawValue) {
   if (!rawValue) return "";
   const cleaned = rawValue.replace(/,/g, "");
   const [intPart, decPart] = cleaned.split(".");
   if (!/^\d*$/.test(intPart)) return rawValue.replace(/,/g, "");
-  const withCommas = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const cappedIntPart = intPart.slice(0, MAX_INT_DIGITS);
+  const withCommas = cappedIntPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return decPart !== undefined ? `${withCommas}.${decPart}` : withCommas;
 }
 
