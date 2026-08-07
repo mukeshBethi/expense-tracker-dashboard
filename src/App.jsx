@@ -154,12 +154,12 @@ export default function App() {
           <div className="bg-surface shadow-soft rounded-card p-5 sm:p-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
               <h2 className="text-sm font-semibold text-text">Expenses</h2>
-              <div className="flex gap-2">
-                <div className="w-44">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="w-full sm:w-44">
                   <Combobox options={state.categories} value={filterCategory} onChange={setFilterCategory} allowClear clearLabel="All categories" placeholder="All categories" />
                 </div>
                 <input type="search" placeholder="Search notes…" value={search} onChange={e => setSearch(e.target.value)}
-                       className="bg-surface-2 border border-border-dim rounded-input px-3 py-2 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
+                       className="w-full sm:w-auto min-w-0 bg-surface-2 border border-border-dim rounded-input px-3 py-2 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
               </div>
             </div>
             <ExpenseTable

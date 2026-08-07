@@ -78,11 +78,11 @@ export default function BudgetList({ categories, budgets, expensesThisMonth, cur
         return (
           <div key={c}>
             <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="text-sm text-text">{c}</span>
+              <span className="text-sm text-text min-w-0 truncate" title={c}>{c}</span>
               <input type="number" min="0" step="1" placeholder="—"
                      defaultValue={limit > 0 ? limit : ""}
                      onBlur={e => handleChange(c, e.target.value)}
-                     className="w-28 bg-surface-2 border border-border-dim rounded-input px-3 py-1.5 text-sm text-text text-right focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
+                     className="w-28 shrink-0 bg-surface-2 border border-border-dim rounded-input px-3 py-1.5 text-sm text-text text-right focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
             </div>
             {errors[c] && <p className="text-xs text-danger mb-1.5">{errors[c]}</p>}
             <div className="h-1.5 rounded-pill bg-surface-2 overflow-hidden">

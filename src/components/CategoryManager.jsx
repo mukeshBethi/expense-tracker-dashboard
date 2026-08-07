@@ -41,7 +41,7 @@ export default function CategoryManager({ categories, expenses, onAddCategory, o
       <form onSubmit={handleAdd} className="flex gap-2">
         <input type="text" maxLength={24} placeholder="Add category…"
                value={name} onChange={e => setName(e.target.value)}
-               className="flex-1 bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
+               className="flex-1 min-w-0 bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
         <button type="submit" className="bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-4 py-2.5 text-sm font-medium transition-colors cursor-pointer">
           Add
         </button>
