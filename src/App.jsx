@@ -92,8 +92,8 @@ export default function App() {
   }
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-3">
-        <Loader2 className="w-6 h-6 text-primary animate-spin" />
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3" role="status">
+        <Loader2 className="w-6 h-6 text-primary animate-spin" aria-hidden="true" />
         <p className="text-sm text-muted">Loading your data…</p>
       </div>
     );

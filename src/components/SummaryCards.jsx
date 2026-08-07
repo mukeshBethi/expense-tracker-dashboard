@@ -28,10 +28,10 @@ function StatCard({ icon: Icon, label, value, badge }) {
   return (
     <div className="bg-surface shadow-soft rounded-card p-5 flex flex-col gap-3">
       <div className="w-9 h-9 rounded-pill bg-primary/10 flex items-center justify-center">
-        <Icon className="w-4 h-4 text-primary" />
+        <Icon className="w-4 h-4 text-primary" aria-hidden="true" />
       </div>
-      <div className="flex items-baseline gap-2">
-        <span className="text-3xl font-bold tabular-nums text-text">{value}</span>
+      <div className="flex items-baseline gap-2 min-w-0">
+        <span className="text-3xl font-bold tabular-nums text-text truncate">{value}</span>
         {badge}
       </div>
       <span className="text-sm text-muted">{label}</span>
@@ -43,7 +43,7 @@ export default function SummaryCards({ expenses, currency }) {
   if (expenses.length === 0) {
     return (
       <div className="bg-surface shadow-soft rounded-card p-8 flex flex-col items-center gap-2 text-center">
-        <Receipt className="w-6 h-6 text-muted" />
+        <Receipt className="w-6 h-6 text-muted" aria-hidden="true" />
         <p className="text-sm text-muted">No expenses yet — add your first one to see your summary here.</p>
       </div>
     );
@@ -75,14 +75,19 @@ export default function SummaryCards({ expenses, currency }) {
     const Arrow = isDown ? ArrowDown : ArrowUp;
     deltaBadge = (
       <span className={`inline-flex items-center gap-0.5 text-xs font-semibold rounded-pill px-2 py-0.5 ${isDown ? "bg-emerald-500/10 text-emerald-500" : "bg-red-500/10 text-red-500"}`}>
-        <Arrow className="w-3 h-3" />
-        {Math.abs(pct).toFixed(0)}%
+        <span aria-hidden="true" className="inline-flex items-center gap-0.5">
+          <Arrow className="w-3 h-3" />
+          {Math.abs(pct).toFixed(0)}%
+        </span>
+        <span className="sr-only">
+          {isDown ? "decreased" : "increased"} {Math.abs(pct).toFixed(0)}% compared to the same point last month
+        </span>
       </span>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
       <StatCard icon={Wallet} label="Spent this month" value={formatMoney(monthTotal, currency)} badge={deltaBadge} />
       <StatCard icon={CalendarDays} label="Spent today" value={formatMoney(todayTotal, currency)} />
       <StatCard icon={Tag} label="Top category" value={topCat} />
