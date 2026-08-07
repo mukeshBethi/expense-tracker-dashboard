@@ -30,6 +30,7 @@
   --color-pr-secondary: var(--pr-secondary);
   --color-pr-tertiary: var(--pr-tertiary);
   --color-pr-accent: var(--pr-accent);
+  --color-pr-accent-hover: var(--pr-blue-700);
   --color-pr-navy: var(--pr-navy);
   --color-pr-success: var(--pr-success);
   --color-pr-success-soft: var(--pr-success-soft);

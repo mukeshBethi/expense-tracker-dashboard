@@ -4,7 +4,9 @@ import { AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "./hooks/useAuth.js";
 import { useExpenseData } from "./hooks/useExpenseData.js";
 import { useTheme } from "./hooks/useTheme.js";
+import { formatMoney } from "./lib/format.js";
 import AuthScreen from "./components/AuthScreen.jsx";
+import Shell from "./components/shell/Shell.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import ComingSoonPage from "./pages/ComingSoonPage.jsx";
 
@@ -92,7 +94,7 @@ export default function App() {
   }
 
   const dashboardProps = {
-    user, state, theme, toggleTheme, setCurrency, handleExport, signOutUser,
+    state, theme, setCurrency,
     expensesThisMonth, editingExpense, setEditingExpense, handleFormSubmit,
     addCategory, setConfirmRemoveCategory, setBudget, setTotalBudget,
     filteredExpenses, filterCategory, setFilterCategory, search, setSearch,
@@ -101,14 +103,32 @@ export default function App() {
     confirmRemoveCategory, removeCategory, confirmClearAll, clearAll,
   };
 
+  const monthTotalRaw = expensesThisMonth.reduce((sum, e) => sum + e.amount, 0);
+  const totalBudget = state.settings.totalBudget || 0;
+  const budgetUsedPct = `${totalBudget > 0 ? Math.min(100, Math.round((monthTotalRaw / totalBudget) * 100)) : 0}%`;
+
   return (
-    <Routes>
-      <Route path="/" element={<DashboardPage {...dashboardProps} />} />
-      <Route path="/expenses" element={<ComingSoonPage title="Expenses" />} />
-      <Route path="/budgets" element={<ComingSoonPage title="Budgets" />} />
-      <Route path="/analytics" element={<ComingSoonPage title="Analytics" />} />
-      <Route path="/categories" element={<ComingSoonPage title="Categories" />} />
-      <Route path="/settings" element={<ComingSoonPage title="Settings" />} />
-    </Routes>
+    <Shell
+      title="Tally"
+      subtitle="Personal finance"
+      email={user.email}
+      onSignOut={signOutUser}
+      theme={theme}
+      toggleTheme={toggleTheme}
+      onExport={handleExport}
+      onOpenAdd={() => setEditingExpense(null)}
+      monthTotal={formatMoney(monthTotalRaw, state.settings.currency)}
+      totalBudgetShort={formatMoney(totalBudget, state.settings.currency)}
+      budgetUsedPct={budgetUsedPct}
+    >
+      <Routes>
+        <Route path="/" element={<DashboardPage {...dashboardProps} />} />
+        <Route path="/expenses" element={<ComingSoonPage title="Expenses" />} />
+        <Route path="/budgets" element={<ComingSoonPage title="Budgets" />} />
+        <Route path="/analytics" element={<ComingSoonPage title="Analytics" />} />
+        <Route path="/categories" element={<ComingSoonPage title="Categories" />} />
+        <Route path="/settings" element={<ComingSoonPage title="Settings" />} />
+      </Routes>
+    </Shell>
   );
 }

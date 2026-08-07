@@ -1,4 +1,3 @@
-import Header from "../components/Header.jsx";
 import ExpenseForm from "../components/ExpenseForm.jsx";
 import Combobox from "../components/Combobox.jsx";
 import CategoryManager from "../components/CategoryManager.jsx";
@@ -12,7 +11,7 @@ import Toast from "../components/Toast.jsx";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
 
 export default function DashboardPage({
-  user, state, theme, toggleTheme, setCurrency, handleExport, signOutUser,
+  state, theme, setCurrency,
   expensesThisMonth, editingExpense, setEditingExpense, handleFormSubmit,
   addCategory, setConfirmRemoveCategory, setBudget, setTotalBudget,
   filteredExpenses, filterCategory, setFilterCategory, search, setSearch,
@@ -22,15 +21,23 @@ export default function DashboardPage({
 }) {
   return (
     <div>
-      <Header
-        email={user.email}
-        currency={state.settings.currency}
-        theme={theme}
-        onCurrencyChange={setCurrency}
-        onToggleTheme={toggleTheme}
-        onExport={handleExport}
-        onSignOut={signOutUser}
-      />
+      {/* TEMPORARY: the old Header (theme toggle/export/sign-out) is gone now that
+          the new Shell provides equivalent controls, but Shell's TopBar has no
+          currency picker yet (that's moving to the Phase 8 Settings page) — keep
+          a minimal inline one here so currency-switching isn't lost in the meantime. */}
+      <div className="max-w-[1440px] mx-auto flex justify-end px-4 sm:px-6 lg:px-9 pt-4">
+        <select
+          value={state.settings.currency}
+          onChange={e => setCurrency(e.target.value)}
+          title="Currency"
+          className="bg-surface-2 border border-border-dim rounded-input px-2.5 py-1.5 text-sm text-text cursor-pointer"
+        >
+          <option value="$">$ USD</option>
+          <option value="€">€ EUR</option>
+          <option value="£">£ GBP</option>
+          <option value="₹">₹ INR</option>
+        </select>
+      </div>
       <AlertBanner categories={state.categories} budgets={state.budgets} expensesThisMonth={expensesThisMonth} />
       <main className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 px-4 sm:px-6 lg:px-9 py-7 pb-14">
         <section className="flex flex-col gap-6">
