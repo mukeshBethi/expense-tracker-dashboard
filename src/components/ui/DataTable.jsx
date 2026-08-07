@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function DataTable({ columns, rows, selectable = false, rowsPerPage = 10, resultLabel, selectionBar }) {
   const [page, setPage] = useState(0);
@@ -78,8 +79,12 @@ export default function DataTable({ columns, rows, selectable = false, rowsPerPa
         <div className="flex items-center justify-between px-1">
           <span className="text-xs text-pr-tertiary">Page {page + 1} of {totalPages}</span>
           <div className="flex gap-2">
-            <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="px-3 py-1.5 rounded-pr-default text-xs font-medium text-pr-primary bg-pr-subtle hover:bg-pr-border-default disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">Previous</button>
-            <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="px-3 py-1.5 rounded-pr-default text-xs font-medium text-pr-primary bg-pr-subtle hover:bg-pr-border-default disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">Next</button>
+            <button onClick={() => setPage(p => Math.max(0, p - 1))} disabled={page === 0} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-pr-default text-xs font-medium text-pr-primary bg-pr-subtle hover:bg-pr-border-default disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">
+              <ChevronLeft size={14} /> Previous
+            </button>
+            <button onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))} disabled={page >= totalPages - 1} className="inline-flex items-center gap-1 px-3 py-1.5 rounded-pr-default text-xs font-medium text-pr-primary bg-pr-subtle hover:bg-pr-border-default disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer">
+              Next <ChevronRight size={14} />
+            </button>
           </div>
         </div>
       )}
