@@ -18,38 +18,32 @@ function monthKey(iso) { return iso.slice(0, 7); }
 
 export default function App() {
   const { user, authLoading, signIn, signUp, signOutUser, authError, clearAuthError } = useAuth();
-  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setTotalBudget, setThemePreference, clearAll } = useExpenseData(user?.uid);
+  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, setThemePreference } = useExpenseData(user?.uid);
   const { theme, toggleTheme } = useTheme(state.settings.theme, setThemePreference);
 
-  const [filterCategory, setFilterCategory] = useState("");
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState({ key: "date", dir: "desc" });
   const [editingExpense, setEditingExpense] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
-  const [confirmRemoveCategory, setConfirmRemoveCategory] = useState(null);
-  const [confirmClearAll, setConfirmClearAll] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
   const dismissToast = useCallback(() => setToastMessage(null), []);
+
+  const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
+
+  const openExpenseModal = useCallback((expense = null) => {
+    setEditingExpense(expense);
+    setIsExpenseModalOpen(true);
+  }, []);
+
+  const closeExpenseModal = useCallback(() => {
+    setIsExpenseModalOpen(false);
+    setEditingExpense(null);
+  }, []);
 
   const monthK = todayISO().slice(0, 7);
   const expensesThisMonth = useMemo(
     () => state.expenses.filter(e => monthKey(e.date) === monthK),
     [state.expenses, monthK]
   );
-
-  const filteredExpenses = useMemo(() => {
-    let rows = state.expenses.filter(e => {
-      if (filterCategory && e.category !== filterCategory) return false;
-      if (search && !(e.note || "").toLowerCase().includes(search.toLowerCase())) return false;
-      return true;
-    });
-    rows.sort((a, b) => {
-      const cmp = sort.key === "amount" ? a.amount - b.amount : (a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
-      return sort.dir === "asc" ? cmp : -cmp;
-    });
-    return rows;
-  }, [state.expenses, filterCategory, search, sort]);
 
   function handleFormSubmit(expense) {
     if (editingExpense) updateExpense(editingExpense.id, expense);
@@ -58,10 +52,11 @@ export default function App() {
   }
 
   function handleExport() {
-    if (filteredExpenses.length === 0) { setToastMessage("No expenses to export for the current filter."); return; }
+    if (state.expenses.length === 0) { setToastMessage("No expenses to export."); return; }
+    const sortedExpenses = [...state.expenses].sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
     const header = ["Date", "Category", "Note", "Amount"];
     const esc = v => { const s = String(v ?? ""); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
-    const lines = [header.join(","), ...filteredExpenses.map(e => [esc(e.date), esc(e.category), esc(e.note || ""), esc(e.amount.toFixed(2))].join(","))];
+    const lines = [header.join(","), ...sortedExpenses.map(e => [esc(e.date), esc(e.category), esc(e.note || ""), esc(e.amount.toFixed(2))].join(","))];
     const blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = Object.assign(document.createElement("a"), { href: url, download: `expenses-${todayISO()}.csv` });
@@ -94,13 +89,10 @@ export default function App() {
   }
 
   const dashboardProps = {
-    state, theme, setCurrency,
-    expensesThisMonth, editingExpense, setEditingExpense, handleFormSubmit,
-    addCategory, setConfirmRemoveCategory, setBudget, setTotalBudget,
-    filteredExpenses, filterCategory, setFilterCategory, search, setSearch,
-    setConfirmDeleteId, sort, setSort, setConfirmClearAll,
-    toastMessage, dismissToast, confirmDeleteId, deleteExpense, setToastMessage,
-    confirmRemoveCategory, removeCategory, confirmClearAll, clearAll,
+    state, theme, expensesThisMonth,
+    isExpenseModalOpen, openExpenseModal, closeExpenseModal, editingExpense, handleFormSubmit,
+    confirmDeleteId, setConfirmDeleteId, deleteExpense,
+    toastMessage, dismissToast, setToastMessage,
   };
 
   const monthTotalRaw = expensesThisMonth.reduce((sum, e) => sum + e.amount, 0);
@@ -116,7 +108,7 @@ export default function App() {
       theme={theme}
       toggleTheme={toggleTheme}
       onExport={handleExport}
-      onOpenAdd={() => setEditingExpense(null)}
+      onOpenAdd={() => openExpenseModal(null)}
       monthTotal={formatMoney(monthTotalRaw, state.settings.currency)}
       totalBudgetShort={formatMoney(totalBudget, state.settings.currency)}
       budgetUsedPct={budgetUsedPct}
