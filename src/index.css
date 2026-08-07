@@ -211,15 +211,15 @@ html, body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  color: var(--text);
+  color: var(--pr-primary);
   font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg);
+  background-color: var(--pr-page);
 }
 
 /* Native <select> dropdown popup styling — browsers don't let className reach
    into the rendered option list, so this can't be replaced by a Tailwind
    utility class the way the rest of the form styling was. */
-select option { background: var(--option-bg); color: var(--text); }
+select option { background: var(--pr-card); color: var(--pr-primary); }
 
 /* =========================================================================
    BUTTONS
@@ -260,8 +260,8 @@ input[type="text"] { cursor: pointer; }
 /* --- Input / select hover (pre-focus visual cue) ----------------------- */
 input:hover:not(:focus),
 select:hover:not(:focus) {
-  border-color: rgba(52, 211, 153, 0.32);
-  background: rgba(255, 255, 255, 0.07);
+  border-color: var(--pr-border-strong);
+  background: var(--pr-subtle);
 }
 
 /* --- Link button hover ------------------------------------------------- */
