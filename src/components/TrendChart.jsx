@@ -14,6 +14,7 @@ function gradientFill(ctx, chartArea) {
 
 export default function TrendChart({ expenses, currency, theme }) {
   const gridColor = theme === "light" ? "rgba(100, 116, 139, 0.35)" : "rgba(148, 163, 184, 0.12)";
+  const textColor = theme === "light" ? "#475569" : "#cbd5e1";
   const byKey = {};
   for (const e of expenses) byKey[e.date] = (byKey[e.date] || 0) + e.amount;
   const labels = Object.keys(byKey).sort();
@@ -22,7 +23,7 @@ export default function TrendChart({ expenses, currency, theme }) {
   if (labels.length === 0) {
     return (
       <div className="h-[260px] flex flex-col items-center justify-center gap-2 text-center">
-        <TrendingUp className="w-6 h-6 text-muted" />
+        <TrendingUp className="w-6 h-6 text-muted" aria-hidden="true" />
         <p className="text-sm text-muted">No data for this filter yet.</p>
       </div>
     );
@@ -65,8 +66,8 @@ export default function TrendChart({ expenses, currency, theme }) {
             },
           },
           scales: {
-            x: { grid: { color: gridColor }, ticks: { font: { size: 11 } } },
-            y: { grid: { color: gridColor }, ticks: { callback: v => formatMoney(v, currency), font: { size: 11 } } },
+            x: { grid: { color: gridColor }, ticks: { color: textColor, font: { size: 11 } } },
+            y: { grid: { color: gridColor }, ticks: { color: textColor, callback: v => formatMoney(v, currency), font: { size: 11 } } },
           },
         }}
       />

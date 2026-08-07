@@ -7,7 +7,8 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const PALETTE = ["#10b981", "#6c8cff", "#f59e0b", "#f87171", "#a78bfa", "#22d3ee", "#fb923c", "#f472b6"];
 
-export default function CategoryChart({ expenses, currency }) {
+export default function CategoryChart({ expenses, currency, theme }) {
+  const textColor = theme === "light" ? "#475569" : "#cbd5e1";
   const totals = {};
   for (const e of expenses) totals[e.category] = (totals[e.category] || 0) + e.amount;
   const labels = Object.keys(totals);
@@ -16,7 +17,7 @@ export default function CategoryChart({ expenses, currency }) {
   if (labels.length === 0) {
     return (
       <div className="h-[260px] flex flex-col items-center justify-center gap-2 text-center">
-        <PieChart className="w-6 h-6 text-muted" />
+        <PieChart className="w-6 h-6 text-muted" aria-hidden="true" />
         <p className="text-sm text-muted">No data for this filter yet.</p>
       </div>
     );
@@ -32,7 +33,7 @@ export default function CategoryChart({ expenses, currency }) {
           plugins: {
             legend: {
               position: "bottom",
-              labels: { boxWidth: 10, boxHeight: 10, padding: 16, font: { size: 12, family: "inherit" } },
+              labels: { boxWidth: 10, boxHeight: 10, padding: 16, font: { size: 12, family: "inherit" }, color: textColor },
             },
             tooltip: {
               callbacks: { label: c => `${c.label}: ${formatMoney(c.parsed, currency)}` },

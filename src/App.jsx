@@ -147,8 +147,8 @@ export default function App() {
         <section className="col col-right">
           <SummaryCards expenses={state.expenses} currency={state.settings.currency} />
           <div className="charts-grid">
-            <div className="card chart-card"><h2>By Category</h2><CategoryChart expenses={filteredExpenses} currency={state.settings.currency} /></div>
-            <div className="card chart-card"><h2>Spending Trend</h2><TrendChart expenses={filteredExpenses} currency={state.settings.currency} theme={theme} /></div>
+            <div className="bg-surface shadow-soft rounded-card p-5 flex flex-col gap-3"><h2 className="text-sm font-semibold text-text mb-1">By Category</h2><CategoryChart expenses={filteredExpenses} currency={state.settings.currency} theme={theme} /></div>
+            <div className="bg-surface shadow-soft rounded-card p-5 flex flex-col gap-3"><h2 className="text-sm font-semibold text-text mb-1">Spending Trend</h2><TrendChart expenses={filteredExpenses} currency={state.settings.currency} theme={theme} /></div>
           </div>
           <div className="card">
             <div className="table-toolbar">
