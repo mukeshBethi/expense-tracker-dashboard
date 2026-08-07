@@ -67,17 +67,17 @@ export default function Combobox({ id, options, value, onChange, placeholder = "
           onChange={e => { setQuery(e.target.value); setOpen(true); setHighlightedIndex(0); }}
           onKeyDown={handleKeyDown}
           onBlur={() => { setOpen(false); setQuery(""); }}
-          className="w-full bg-surface-2 border border-border-dim rounded-input pl-3 pr-8 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors cursor-text"
+          className="w-full bg-pr-subtle border border-pr-border-default rounded-pr-default pl-3 pr-8 py-2.5 text-sm text-pr-primary placeholder:text-pr-tertiary focus:outline-none focus:ring-2 focus:ring-pr-accent/30 focus:border-pr-accent transition-colors cursor-text"
         />
-        {open ? <Search className="w-4 h-4 text-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" /> : <ChevronDown className="w-4 h-4 text-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />}
+        {open ? <Search className="w-4 h-4 text-pr-tertiary absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" /> : <ChevronDown className="w-4 h-4 text-pr-tertiary absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />}
       </div>
       {open && (
-        <ul id={listboxId} role="listbox" className="absolute z-10 mt-1 w-full max-h-56 overflow-y-auto bg-surface shadow-soft rounded-input border border-border-dim py-1">
-          {filtered.length === 0 && <li className="px-3 py-2 text-sm text-muted">No matches</li>}
+        <ul id={listboxId} role="listbox" className="absolute z-10 mt-1 w-full max-h-56 overflow-y-auto bg-pr-card shadow-pr-md rounded-pr-default border border-pr-border-default py-1">
+          {filtered.length === 0 && <li className="px-3 py-2 text-sm text-pr-tertiary">No matches</li>}
           {filtered.map((opt, i) => (
             <li key={opt || "__clear__"} role="option" aria-selected={opt === value}
                 onMouseDown={() => selectOption(opt)}
-                className={`px-3 py-2 text-sm cursor-pointer ${i === highlightedIndex ? "bg-surface-2" : ""} ${opt === value ? "text-primary font-medium" : "text-text"}`}>
+                className={`px-3 py-2 text-sm cursor-pointer ${i === highlightedIndex ? "bg-pr-subtle" : ""} ${opt === value ? "text-pr-accent font-medium" : "text-pr-primary"}`}>
               {labelFor(opt)}
             </li>
           ))}
