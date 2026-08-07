@@ -150,15 +150,17 @@ export default function App() {
             <div className="bg-surface shadow-soft rounded-card p-5 flex flex-col gap-3"><h2 className="text-sm font-semibold text-text mb-1">By Category</h2><CategoryChart expenses={filteredExpenses} currency={state.settings.currency} theme={theme} /></div>
             <div className="bg-surface shadow-soft rounded-card p-5 flex flex-col gap-3"><h2 className="text-sm font-semibold text-text mb-1">Spending Trend</h2><TrendChart expenses={filteredExpenses} currency={state.settings.currency} theme={theme} /></div>
           </div>
-          <div className="card">
-            <div className="table-toolbar">
-              <h2>Expenses</h2>
-              <div className="filters">
-                <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}>
+          <div className="bg-surface shadow-soft rounded-card p-5 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+              <h2 className="text-sm font-semibold text-text">Expenses</h2>
+              <div className="flex gap-2">
+                <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}
+                        className="bg-surface-2 border border-border-dim rounded-input px-3 py-2 text-sm text-text">
                   <option value="">All categories</option>
                   {state.categories.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
-                <input type="search" placeholder="Search notes…" value={search} onChange={e => setSearch(e.target.value)} />
+                <input type="search" placeholder="Search notes…" value={search} onChange={e => setSearch(e.target.value)}
+                       className="bg-surface-2 border border-border-dim rounded-input px-3 py-2 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
               </div>
             </div>
             <ExpenseTable
