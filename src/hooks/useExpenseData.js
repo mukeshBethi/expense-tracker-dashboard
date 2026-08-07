@@ -6,7 +6,7 @@ const DEFAULT_STATE = {
   expenses: [],
   budgets: {},
   categories: [...DEFAULT_CATEGORIES],
-  settings: { currency: "$", theme: "dark", totalBudget: 0 },
+  settings: { currency: "$", theme: "dark", totalBudget: 0, displayName: "", budgetAlertsEnabled: true, weeklySummaryEnabled: false },
 };
 
 export function useExpenseData(uid) {
@@ -31,7 +31,7 @@ export function useExpenseData(uid) {
       if (cancelled) return;
       const data = snap.exists() ? snap.data() : {};
       setState({
-        settings: { currency: "$", theme: "dark", totalBudget: 0, ...(data.settings || {}) },
+        settings: { currency: "$", theme: "dark", totalBudget: 0, displayName: "", budgetAlertsEnabled: true, weeklySummaryEnabled: false, ...(data.settings || {}) },
         categories: Array.isArray(data.categories) && data.categories.length ? data.categories : [...DEFAULT_CATEGORIES],
         budgets: data.budgets || {},
         expenses: Array.isArray(data.expenses) ? data.expenses : [],
@@ -139,6 +139,33 @@ export function useExpenseData(uid) {
     });
   }, [persistProfile]);
 
+  const setDisplayName = useCallback((displayName) => {
+    setState(prev => {
+      const settings = { ...prev.settings, displayName };
+      const next = { ...prev, settings };
+      persistProfile(next).catch(err => console.error("Failed to save display name:", err));
+      return next;
+    });
+  }, [persistProfile]);
+
+  const setBudgetAlertsEnabled = useCallback((budgetAlertsEnabled) => {
+    setState(prev => {
+      const settings = { ...prev.settings, budgetAlertsEnabled };
+      const next = { ...prev, settings };
+      persistProfile(next).catch(err => console.error("Failed to save budget alerts setting:", err));
+      return next;
+    });
+  }, [persistProfile]);
+
+  const setWeeklySummaryEnabled = useCallback((weeklySummaryEnabled) => {
+    setState(prev => {
+      const settings = { ...prev.settings, weeklySummaryEnabled };
+      const next = { ...prev, settings };
+      persistProfile(next).catch(err => console.error("Failed to save weekly summary setting:", err));
+      return next;
+    });
+  }, [persistProfile]);
+
   const setTotalBudget = useCallback((value) => {
     setState(prev => {
       const num = parseFloat(value);
@@ -173,5 +200,5 @@ export function useExpenseData(uid) {
     });
   }, [persistExpenses, persistProfile]);
 
-  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setCurrency, setTotalBudget, setThemePreference, clearAll };
+  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, setTotalBudget, setThemePreference, clearAll };
 }
