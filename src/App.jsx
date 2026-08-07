@@ -122,8 +122,8 @@ export default function App() {
               onCancelEdit={() => setEditingExpense(null)}
             />
           </div>
-          <div className="card">
-            <h2>Categories</h2>
+          <div className="bg-surface shadow-soft rounded-card p-5 sm:p-6">
+            <h2 className="text-sm font-semibold text-text mb-3">Categories</h2>
             <CategoryManager
               categories={state.categories}
               expenses={state.expenses}
