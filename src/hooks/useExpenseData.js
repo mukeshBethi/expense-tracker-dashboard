@@ -88,6 +88,16 @@ export function useExpenseData(uid) {
     });
   }, [persistExpenses]);
 
+  const deleteExpenses = useCallback((ids) => {
+    setState(prev => {
+      const idSet = new Set(ids);
+      const expenses = prev.expenses.filter(e => !idSet.has(e.id));
+      const next = { ...prev, expenses };
+      persistExpenses(expenses).catch(err => console.error("Failed to save bulk expense deletion:", err));
+      return next;
+    });
+  }, [persistExpenses]);
+
   const addCategory = useCallback((name) => {
     setState(prev => {
       const categories = [...prev.categories, name];
@@ -163,5 +173,5 @@ export function useExpenseData(uid) {
     });
   }, [persistExpenses, persistProfile]);
 
-  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, addCategory, removeCategory, setBudget, setCurrency, setTotalBudget, setThemePreference, clearAll };
+  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setCurrency, setTotalBudget, setThemePreference, clearAll };
 }
