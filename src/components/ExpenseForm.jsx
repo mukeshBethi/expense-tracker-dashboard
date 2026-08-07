@@ -64,35 +64,44 @@ export default function ExpenseForm({ categories, onSubmit, editingExpense, onCa
   }
 
   return (
-    <form className="expense-form" onSubmit={handleSubmit} autoComplete="off">
-      <div className="field">
-        <label htmlFor="exp-date">Date</label>
+    <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
+      <div>
+        <label htmlFor="exp-date" className="text-xs font-semibold uppercase tracking-wide text-muted mb-1.5 block">Date</label>
         <input id="exp-date" type="date" max={todayISO()} value={date}
-               onChange={e => setDate(e.target.value)} />
-        {errors.date && <p className="field-error">{errors.date}</p>}
+               onChange={e => setDate(e.target.value)}
+               className="w-full bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
+        {errors.date && <p className="text-xs text-danger mt-1">{errors.date}</p>}
       </div>
-      <div className="field">
-        <label htmlFor="exp-amount">Amount</label>
+      <div>
+        <label htmlFor="exp-amount" className="text-xs font-semibold uppercase tracking-wide text-muted mb-1.5 block">Amount</label>
         <input id="exp-amount" type="text" inputMode="decimal" placeholder="0.00"
-               value={amountDisplay} onChange={handleAmountChange} />
-        {errors.amount && <p className="field-error">{errors.amount}</p>}
+               value={amountDisplay} onChange={handleAmountChange}
+               className="w-full bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
+        {errors.amount && <p className="text-xs text-danger mt-1">{errors.amount}</p>}
       </div>
-      <div className="field">
-        <label htmlFor="exp-category">Category</label>
-        <select id="exp-category" value={category} onChange={e => setCategory(e.target.value)}>
+      <div>
+        <label htmlFor="exp-category" className="text-xs font-semibold uppercase tracking-wide text-muted mb-1.5 block">Category</label>
+        <select id="exp-category" value={category} onChange={e => setCategory(e.target.value)}
+                className="w-full bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
           {categories.map(c => <option key={c} value={c}>{c}</option>)}
         </select>
-        {errors.category && <p className="field-error">{errors.category}</p>}
+        {errors.category && <p className="text-xs text-danger mt-1">{errors.category}</p>}
       </div>
-      <div className="field">
-        <label htmlFor="exp-note">Note <span className="muted">(optional)</span></label>
+      <div>
+        <label htmlFor="exp-note" className="text-xs font-semibold uppercase tracking-wide text-muted mb-1.5 block">Note <span className="font-normal not-italic text-muted/70">(optional)</span></label>
         <input id="exp-note" type="text" maxLength={120} placeholder="e.g. Lunch with team"
-               value={note} onChange={e => setNote(e.target.value)} />
+               value={note} onChange={e => setNote(e.target.value)}
+               className="w-full bg-surface-2 border border-border-dim rounded-input px-3 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
       </div>
-      <div className="form-actions">
-        <button type="submit" className="btn btn-primary">{editingExpense ? "Save" : "Add"}</button>
+      <div className="flex gap-3">
+        <button type="submit" className="flex-1 bg-primary text-white hover:bg-primary-text transition-colors rounded-pill px-4 py-2.5 text-sm font-semibold">
+          {editingExpense ? "Save" : "Add"}
+        </button>
         {editingExpense && (
-          <button type="button" className="btn btn-ghost" onClick={() => { onCancelEdit(); resetForm(); }}>Cancel</button>
+          <button type="button" onClick={() => { onCancelEdit(); resetForm(); }}
+                  className="flex-1 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-4 py-2.5 text-sm font-medium transition-colors">
+            Cancel
+          </button>
         )}
       </div>
     </form>

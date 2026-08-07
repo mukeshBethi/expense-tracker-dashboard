@@ -113,8 +113,8 @@ export default function App() {
       <AlertBanner categories={state.categories} budgets={state.budgets} expensesThisMonth={expensesThisMonth} />
       <main className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 px-4 sm:px-6 lg:px-9 py-7 pb-14">
         <section className="flex flex-col gap-6">
-          <div className="card">
-            <h2>{editingExpense ? "Edit Expense" : "Add Expense"}</h2>
+          <div className="bg-surface shadow-soft rounded-card p-5 sm:p-6">
+            <h2 className="text-sm font-semibold text-text mb-3">{editingExpense ? "Edit Expense" : "Add Expense"}</h2>
             <ExpenseForm
               categories={state.categories}
               onSubmit={handleFormSubmit}
