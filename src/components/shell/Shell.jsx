@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar.jsx";
 import TopBar from "./TopBar.jsx";
 import MobileBottomNav from "./MobileBottomNav.jsx";
 
-export default function Shell({ children, title, subtitle, email, onSignOut, theme, toggleTheme, onOpenAdd, monthTotal, totalBudgetShort, budgetUsedPct }) {
+export default function Shell({ children, title, subtitle, email, displayName, onSignOut, theme, toggleTheme, onOpenAdd, monthTotal, totalBudgetShort, budgetUsedPct }) {
   const [collapsed, setCollapsed] = useState(false);
   return (
     <div className="flex h-screen overflow-hidden bg-pr-page font-[Inter,sans-serif]">
@@ -11,6 +11,7 @@ export default function Shell({ children, title, subtitle, email, onSignOut, the
         collapsed={collapsed}
         onToggleCollapse={() => setCollapsed(c => !c)}
         email={email}
+        displayName={displayName}
         onSignOut={onSignOut}
         monthTotal={monthTotal}
         totalBudgetShort={totalBudgetShort}
