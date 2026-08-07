@@ -10,7 +10,7 @@ export default function AlertBanner({ categories, budgets, expensesThisMonth }) 
   if (over.length === 0) return null;
 
   return (
-    <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/20 rounded-card px-4 py-3 mx-9 mt-4">
+    <div className="flex items-center gap-3 bg-red-500/10 border border-red-500/20 rounded-card px-4 py-3 mx-4 sm:mx-9 mt-4">
       <div className="w-8 h-8 rounded-pill bg-red-500/15 flex items-center justify-center flex-shrink-0">
         <AlertTriangle className="w-4 h-4 text-red-500" />
       </div>
