@@ -103,7 +103,7 @@ export default function App() {
   const budgetsProps = { state, expensesThisMonth, setBudget, setTotalBudget };
   const categoriesProps = { state, addCategory, removeCategory, toastMessage, dismissToast, setToastMessage };
   const analyticsProps = { state, theme, expensesThisMonth };
-  const settingsProps = { state, theme, toggleTheme, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, handleExport };
+  const settingsProps = { state, theme, toggleTheme, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, handleExport, toastMessage, dismissToast, setToastMessage };
 
   const monthTotalRaw = expensesThisMonth.reduce((sum, e) => sum + e.amount, 0);
   const totalBudget = state.settings.totalBudget || 0;
@@ -114,6 +114,7 @@ export default function App() {
       title="Tally"
       subtitle="Personal finance"
       email={user.email}
+      displayName={state.settings.displayName}
       onSignOut={signOutUser}
       theme={theme}
       toggleTheme={toggleTheme}
