@@ -111,8 +111,8 @@ export default function App() {
         onSignOut={signOutUser}
       />
       <AlertBanner categories={state.categories} budgets={state.budgets} expensesThisMonth={expensesThisMonth} />
-      <main className="layout">
-        <section className="col col-left">
+      <main className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 px-4 sm:px-6 lg:px-9 py-7 pb-14">
+        <section className="flex flex-col gap-6">
           <div className="card">
             <h2>{editingExpense ? "Edit Expense" : "Add Expense"}</h2>
             <ExpenseForm
@@ -144,7 +144,7 @@ export default function App() {
             />
           </div>
         </section>
-        <section className="col col-right">
+        <section className="flex flex-col gap-6">
           <SummaryCards expenses={state.expenses} currency={state.settings.currency} />
           <div className="charts-grid">
             <div className="bg-surface shadow-soft rounded-card p-5 flex flex-col gap-3"><h2 className="text-sm font-semibold text-text mb-1">By Category</h2><CategoryChart expenses={filteredExpenses} currency={state.settings.currency} theme={theme} /></div>
