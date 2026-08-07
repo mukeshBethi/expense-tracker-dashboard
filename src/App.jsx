@@ -1,4 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import { useAuth } from "./hooks/useAuth.js";
 import { useExpenseData } from "./hooks/useExpenseData.js";
 import { useTheme } from "./hooks/useTheme.js";
@@ -81,10 +82,21 @@ export default function App() {
     return <AuthScreen onSignIn={signIn} onSignUp={signUp} authError={authError} clearAuthError={clearAuthError} />;
   }
   if (loadError) {
-    return <p className="loading-error">Couldn't load your data. Please refresh the page.</p>;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 text-center px-6">
+        <AlertCircle className="w-8 h-8 text-red-500" />
+        <p className="text-text font-medium">Couldn't load your data</p>
+        <p className="text-sm text-muted">Please refresh the page to try again.</p>
+      </div>
+    );
   }
   if (loading) {
-    return <p className="loading-label">Loading your data…</p>;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-6 h-6 text-primary animate-spin" />
+        <p className="text-sm text-muted">Loading your data…</p>
+      </div>
+    );
   }
 
   return (
