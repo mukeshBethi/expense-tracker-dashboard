@@ -10,6 +10,7 @@ import Shell from "./components/shell/Shell.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import ExpensesPage from "./pages/ExpensesPage.jsx";
 import BudgetsPage from "./pages/BudgetsPage.jsx";
+import CategoriesPage from "./pages/CategoriesPage.jsx";
 import ComingSoonPage from "./pages/ComingSoonPage.jsx";
 
 function todayISO() {
@@ -20,7 +21,7 @@ function monthKey(iso) { return iso.slice(0, 7); }
 
 export default function App() {
   const { user, authLoading, signIn, signUp, signOutUser, authError, clearAuthError } = useAuth();
-  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, setBudget, setTotalBudget, setThemePreference } = useExpenseData(user?.uid);
+  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setTotalBudget, setThemePreference } = useExpenseData(user?.uid);
   const { theme, toggleTheme } = useTheme(state.settings.theme, setThemePreference);
 
   const [editingExpense, setEditingExpense] = useState(null);
@@ -99,6 +100,7 @@ export default function App() {
   const dashboardProps = { state, theme, expensesThisMonth, ...sharedExpenseModalProps };
   const expensesProps = { state, expensesThisMonth, deleteExpenses, ...sharedExpenseModalProps };
   const budgetsProps = { state, expensesThisMonth, setBudget, setTotalBudget };
+  const categoriesProps = { state, addCategory, removeCategory, toastMessage, dismissToast, setToastMessage };
 
   const monthTotalRaw = expensesThisMonth.reduce((sum, e) => sum + e.amount, 0);
   const totalBudget = state.settings.totalBudget || 0;
@@ -123,7 +125,7 @@ export default function App() {
         <Route path="/expenses" element={<ExpensesPage {...expensesProps} />} />
         <Route path="/budgets" element={<BudgetsPage {...budgetsProps} />} />
         <Route path="/analytics" element={<ComingSoonPage title="Analytics" />} />
-        <Route path="/categories" element={<ComingSoonPage title="Categories" />} />
+        <Route path="/categories" element={<CategoriesPage {...categoriesProps} />} />
         <Route path="/settings" element={<ComingSoonPage title="Settings" />} />
       </Routes>
     </Shell>
