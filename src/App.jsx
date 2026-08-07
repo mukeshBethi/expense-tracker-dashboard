@@ -131,8 +131,8 @@ export default function App() {
               onRequestRemoveCategory={setConfirmRemoveCategory}
             />
           </div>
-          <div className="card">
-            <h2>Monthly Budgets</h2>
+          <div className="bg-surface shadow-soft rounded-card p-5 sm:p-6">
+            <h2 className="text-sm font-semibold text-text mb-3">Monthly Budgets</h2>
             <BudgetList
               categories={state.categories}
               budgets={state.budgets}

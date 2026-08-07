@@ -48,21 +48,24 @@ export default function BudgetList({ categories, budgets, expensesThisMonth, cur
   }
 
   return (
-    <div className="budget-list">
-      <div className="budget-row total-budget-row">
-        <div className="budget-head">
-          <span className="b-cat">Total Monthly Budget</span>
+    <div className="space-y-5">
+      <div>
+        <div className="flex items-center justify-between gap-3 mb-1.5">
+          <span className="text-sm font-medium text-text">Total Monthly Budget</span>
           <input type="number" min="0" step="1" placeholder="—"
                  defaultValue={totalBudget > 0 ? totalBudget : ""}
-                 onBlur={e => handleTotalChange(e.target.value)} />
+                 onBlur={e => handleTotalChange(e.target.value)}
+                 className="w-28 bg-surface-2 border border-border-dim rounded-input px-3 py-1.5 text-sm text-text text-right focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
         </div>
-        {totalError && <p className="field-error">{totalError}</p>}
+        {totalError && <p className="text-xs text-danger mb-1.5">{totalError}</p>}
         {totalBudget > 0 && (
           <>
-            <div className="bar"><span style={{ width: `${allocatedPct}%` }} /></div>
-            <div className="budget-meta">
-              {`Allocated ${formatMoney(allocated, currency)} of ${formatMoney(totalBudget, currency)} total`}
+            <div className="h-1.5 rounded-pill bg-surface-2 overflow-hidden">
+              <span className="block h-full bg-primary rounded-pill transition-all" style={{ width: `${allocatedPct}%` }} />
             </div>
+            <p className="text-xs text-muted mt-1.5">
+              {`Allocated ${formatMoney(allocated, currency)} of ${formatMoney(totalBudget, currency)} total`}
+            </p>
           </>
         )}
       </div>
@@ -71,20 +74,23 @@ export default function BudgetList({ categories, budgets, expensesThisMonth, cur
         const limit = Number(budgets[c]) || 0;
         const spent = spentByCat[c] || 0;
         const pct = limit > 0 ? Math.min((spent / limit) * 100, 100) : 0;
-        const cls = limit > 0 && spent > limit ? "over" : limit > 0 && spent >= limit * 0.9 ? "warn" : "";
+        const barColor = limit > 0 && spent > limit ? "bg-danger" : limit > 0 && spent >= limit * 0.9 ? "bg-warn" : "bg-primary";
         return (
-          <div className="budget-row" key={c}>
-            <div className="budget-head">
-              <span className="b-cat">{c}</span>
+          <div key={c}>
+            <div className="flex items-center justify-between gap-3 mb-1.5">
+              <span className="text-sm text-text">{c}</span>
               <input type="number" min="0" step="1" placeholder="—"
                      defaultValue={limit > 0 ? limit : ""}
-                     onBlur={e => handleChange(c, e.target.value)} />
+                     onBlur={e => handleChange(c, e.target.value)}
+                     className="w-28 bg-surface-2 border border-border-dim rounded-input px-3 py-1.5 text-sm text-text text-right focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors" />
             </div>
-            {errors[c] && <p className="field-error">{errors[c]}</p>}
-            <div className={`bar ${cls}`}><span style={{ width: `${pct}%` }} /></div>
-            <div className="budget-meta">
+            {errors[c] && <p className="text-xs text-danger mb-1.5">{errors[c]}</p>}
+            <div className="h-1.5 rounded-pill bg-surface-2 overflow-hidden">
+              <span className={`block h-full rounded-pill transition-all ${barColor}`} style={{ width: `${pct}%` }} />
+            </div>
+            <p className="text-xs text-muted mt-1.5">
               {limit > 0 ? `${formatMoney(spent, currency)} of ${formatMoney(limit, currency)}` : `${formatMoney(spent, currency)} spent · no budget set`}
-            </div>
+            </p>
           </div>
         );
       })}
