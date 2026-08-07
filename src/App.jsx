@@ -11,6 +11,7 @@ import DashboardPage from "./pages/DashboardPage.jsx";
 import ExpensesPage from "./pages/ExpensesPage.jsx";
 import BudgetsPage from "./pages/BudgetsPage.jsx";
 import CategoriesPage from "./pages/CategoriesPage.jsx";
+import AnalyticsPage from "./pages/AnalyticsPage.jsx";
 import ComingSoonPage from "./pages/ComingSoonPage.jsx";
 
 function todayISO() {
@@ -101,6 +102,7 @@ export default function App() {
   const expensesProps = { state, expensesThisMonth, deleteExpenses, ...sharedExpenseModalProps };
   const budgetsProps = { state, expensesThisMonth, setBudget, setTotalBudget };
   const categoriesProps = { state, addCategory, removeCategory, toastMessage, dismissToast, setToastMessage };
+  const analyticsProps = { state, theme, expensesThisMonth };
 
   const monthTotalRaw = expensesThisMonth.reduce((sum, e) => sum + e.amount, 0);
   const totalBudget = state.settings.totalBudget || 0;
@@ -124,7 +126,7 @@ export default function App() {
         <Route path="/" element={<DashboardPage {...dashboardProps} />} />
         <Route path="/expenses" element={<ExpensesPage {...expensesProps} />} />
         <Route path="/budgets" element={<BudgetsPage {...budgetsProps} />} />
-        <Route path="/analytics" element={<ComingSoonPage title="Analytics" />} />
+        <Route path="/analytics" element={<AnalyticsPage {...analyticsProps} />} />
         <Route path="/categories" element={<CategoriesPage {...categoriesProps} />} />
         <Route path="/settings" element={<ComingSoonPage title="Settings" />} />
       </Routes>
