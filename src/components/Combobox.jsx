@@ -66,6 +66,7 @@ export default function Combobox({ id, options, value, onChange, placeholder = "
           onFocus={() => { setOpen(true); setHighlightedIndex(0); }}
           onChange={e => { setQuery(e.target.value); setOpen(true); setHighlightedIndex(0); }}
           onKeyDown={handleKeyDown}
+          onBlur={() => { setOpen(false); setQuery(""); }}
           className="w-full bg-surface-2 border border-border-dim rounded-input pl-3 pr-8 py-2.5 text-sm text-text placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors cursor-text"
         />
         {open ? <Search className="w-4 h-4 text-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" /> : <ChevronDown className="w-4 h-4 text-muted absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />}
