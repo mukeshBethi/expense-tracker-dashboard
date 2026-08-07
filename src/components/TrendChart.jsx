@@ -12,7 +12,8 @@ function gradientFill(ctx, chartArea) {
   return gradient;
 }
 
-export default function TrendChart({ expenses, currency }) {
+export default function TrendChart({ expenses, currency, theme }) {
+  const gridColor = theme === "light" ? "rgba(100, 116, 139, 0.35)" : "rgba(148, 163, 184, 0.12)";
   const byKey = {};
   for (const e of expenses) byKey[e.date] = (byKey[e.date] || 0) + e.amount;
   const labels = Object.keys(byKey).sort();
@@ -64,8 +65,8 @@ export default function TrendChart({ expenses, currency }) {
             },
           },
           scales: {
-            x: { grid: { color: "rgba(148, 163, 184, 0.12)" }, ticks: { font: { size: 11 } } },
-            y: { grid: { color: "rgba(148, 163, 184, 0.12)" }, ticks: { callback: v => formatMoney(v, currency), font: { size: 11 } } },
+            x: { grid: { color: gridColor }, ticks: { font: { size: 11 } } },
+            y: { grid: { color: gridColor }, ticks: { callback: v => formatMoney(v, currency), font: { size: 11 } } },
           },
         }}
       />

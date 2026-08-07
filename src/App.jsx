@@ -136,7 +136,7 @@ export default function App() {
           <SummaryCards expenses={state.expenses} currency={state.settings.currency} />
           <div className="charts-grid">
             <div className="card chart-card"><h2>By Category</h2><CategoryChart expenses={filteredExpenses} currency={state.settings.currency} /></div>
-            <div className="card chart-card"><h2>Spending Trend</h2><TrendChart expenses={filteredExpenses} currency={state.settings.currency} /></div>
+            <div className="card chart-card"><h2>Spending Trend</h2><TrendChart expenses={filteredExpenses} currency={state.settings.currency} theme={theme} /></div>
           </div>
           <div className="card">
             <div className="table-toolbar">
