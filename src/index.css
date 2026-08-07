@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
@@ -19,6 +20,38 @@
   --radius-card:      var(--radius-card);
   --radius-pill:      var(--radius-pill);
   --radius-input:     var(--radius-input);
+
+  /* ── Procura design system tokens (pr- prefixed) ── */
+  --color-pr-page: var(--pr-page);
+  --color-pr-card: var(--pr-card);
+  --color-pr-subtle: var(--pr-subtle);
+  --color-pr-sunken: var(--pr-sunken);
+  --color-pr-primary: var(--pr-primary);
+  --color-pr-secondary: var(--pr-secondary);
+  --color-pr-tertiary: var(--pr-tertiary);
+  --color-pr-accent: var(--pr-accent);
+  --color-pr-navy: var(--pr-navy);
+  --color-pr-success: var(--pr-success);
+  --color-pr-success-soft: var(--pr-success-soft);
+  --color-pr-success-text: var(--pr-success-text);
+  --color-pr-warning: var(--pr-warning);
+  --color-pr-warning-soft: var(--pr-warning-soft);
+  --color-pr-danger: var(--pr-danger);
+  --color-pr-danger-soft: var(--pr-danger-soft);
+  --color-pr-danger-subtle: var(--pr-danger-subtle);
+  --color-pr-border-subtle: var(--pr-border-subtle);
+  --color-pr-border-default: var(--pr-border-default);
+  --color-pr-border-strong: var(--pr-border-strong);
+  --shadow-pr-xs: var(--pr-shadow-xs);
+  --shadow-pr-sm: var(--pr-shadow-sm);
+  --shadow-pr-md: var(--pr-shadow-md);
+  --shadow-pr-lg: var(--pr-shadow-lg);
+  --radius-pr-sm: var(--pr-radius-sm);
+  --radius-pr-default: var(--pr-radius-default);
+  --radius-pr-card: var(--pr-radius-card);
+  --radius-pr-modal: var(--pr-radius-modal);
+  --radius-pr-large: var(--pr-radius-large);
+  --radius-pr-pill: var(--pr-radius-pill);
 }
 
 :root {
@@ -61,6 +94,43 @@
   --radius-input: 10px;
 }
 
+/* ── Procura design system tokens (prefixed pr- to avoid colliding with
+   the existing emerald tokens above) — dark values, default ── */
+:root {
+  --pr-navy-100: #EEF1F8; --pr-navy-250: #C5CEDE; --pr-navy-400: #8A9BB8; --pr-navy-550: #4A6290; --pr-navy-700: #1B2B4B; --pr-navy-850: #070C17;
+  --pr-blue-100: #E9EFFF; --pr-blue-250: #B9CDFF; --pr-blue-400: #789BFF; --pr-blue-550: #2D63EA; --pr-blue-700: #1E40AF; --pr-blue-850: #172B59;
+  --pr-slate-50: #F8FAFC; --pr-slate-400: #94A3B8; --pr-slate-500: #64748B; --pr-slate-900: #0F172A;
+  --pr-success: #16A34A; --pr-success-soft: #123326; --pr-success-text: #6EE7B7;
+  --pr-warning: #D97706; --pr-warning-soft: #3A2A0C; --pr-warning-light: #FCD34D;
+  --pr-danger: #DC2626; --pr-danger-soft: #3A1418; --pr-danger-subtle: #260F12;
+  --pr-viz-1: #2D63EA; --pr-viz-2: #16A34A; --pr-viz-3: #D97706; --pr-viz-4: #E11D48; --pr-viz-5: #7C3AED; --pr-viz-6: #0891B2; --pr-viz-7: #EA580C; --pr-viz-8: #4A6290;
+
+  --pr-page: #0A0F1C;
+  --pr-card: #121A2B;
+  --pr-subtle: #182135;
+  --pr-sunken: #0E1526;
+  --pr-border-subtle: #212C45;
+  --pr-border-default: #25314C;
+  --pr-border-strong: #38455F;
+  --pr-primary: #EDF1F9;
+  --pr-secondary: #93A2BC;
+  --pr-tertiary: #6B7A96;
+  --pr-accent: var(--pr-blue-550);
+  --pr-navy: var(--pr-navy-850);
+
+  --pr-shadow-xs: 0 1px 2px rgba(0,0,0,0.2);
+  --pr-shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --pr-shadow-md: 0 4px 12px rgba(0,0,0,0.35);
+  --pr-shadow-lg: 0 12px 28px rgba(0,0,0,0.45);
+
+  --pr-radius-sm: 3px;
+  --pr-radius-default: 4px;
+  --pr-radius-card: 6px;
+  --pr-radius-modal: 8px;
+  --pr-radius-large: 12px;
+  --pr-radius-pill: 9999px;
+}
+
 :root[data-theme="light"] {
   --bg: #f5f7fb;
   --text: #1a1f36;
@@ -99,6 +169,27 @@
   --surface-1: #ffffff;
   --surface-2: #f3f4f7;
   --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 20px rgba(15, 23, 42, 0.06);
+
+  /* ── Procura design system tokens (pr- prefixed) — light overrides ── */
+  --pr-page: #F4F5F7;
+  --pr-card: #FFFFFF;
+  --pr-subtle: #F4F7FC;
+  --pr-sunken: #E4EAF5;
+  --pr-border-subtle: #E3E9F3;
+  --pr-border-default: #D9E1EF;
+  --pr-border-strong: #CBD5E1;
+  --pr-primary: #0F172A;
+  --pr-secondary: #64748B;
+  --pr-tertiary: #94A3B8;
+  --pr-success-soft: #D1FAE5;
+  --pr-success-text: #065F46;
+  --pr-warning-soft: #FEF3C7;
+  --pr-danger-soft: #FEE2E2;
+  --pr-danger-subtle: #FEF2F2;
+  --pr-shadow-xs: 0 1px 2px rgba(15,23,42,0.04);
+  --pr-shadow-sm: 0 1px 3px rgba(15,23,42,0.06);
+  --pr-shadow-md: 0 4px 12px rgba(0,0,0,0.051);
+  --pr-shadow-lg: 0 12px 28px rgba(15,23,42,0.10);
 }
 
 /* Smooth color transition when toggling theme, scoped to themed surfaces only
