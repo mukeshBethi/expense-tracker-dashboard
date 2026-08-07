@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import { formatMoney } from "../lib/format.js";
 import Combobox from "../components/Combobox.jsx";
@@ -25,22 +26,36 @@ export default function ExpensesPage({
   toastMessage, dismissToast, setToastMessage,
 }) {
   const currency = state.settings.currency;
+  const [searchParams] = useSearchParams();
   const [filterCategory, setFilterCategory] = useState("");
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchParams.get("q") || "");
   const [sortLabel, setSortLabel] = useState(SORT_OPTIONS[0]);
   const [confirmBulkDeleteIds, setConfirmBulkDeleteIds] = useState(null);
 
-  const spentByCat = useMemo(() => {
-    const map = {};
-    for (const e of expensesThisMonth) map[e.category] = (map[e.category] || 0) + e.amount;
-    return map;
-  }, [expensesThisMonth]);
-
-  function budgetInfo(category) {
-    const limit = Number(state.budgets[category]) || 0;
-    const spent = spentByCat[category] || 0;
-    return { limit, remaining: limit - spent };
-  }
+  // Running per-transaction "remaining" balance, category-scoped and computed
+  // in date-ascending order regardless of the table's chosen display sort —
+  // each expense shows the budget left AFTER it, ledger-style, not a flat
+  // per-category snapshot repeated on every row. Only expenses in the current
+  // month have a meaningful figure here, since budgets are monthly.
+  const runningRemainingById = useMemo(() => {
+    const byCategory = {};
+    for (const e of expensesThisMonth) {
+      if (!byCategory[e.category]) byCategory[e.category] = [];
+      byCategory[e.category].push(e);
+    }
+    const result = {};
+    for (const [category, list] of Object.entries(byCategory)) {
+      const limit = Number(state.budgets[category]) || 0;
+      if (limit <= 0) continue;
+      const sorted = [...list].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+      let cumulative = 0;
+      for (const e of sorted) {
+        cumulative += e.amount;
+        result[e.id] = limit - cumulative;
+      }
+    }
+    return result;
+  }, [expensesThisMonth, state.budgets]);
 
   const filteredExpenses = useMemo(() => {
     const { key, dir } = SORT_MAP[sortLabel];
@@ -82,13 +97,14 @@ export default function ExpensesPage({
               { key: "amount", label: "Amount", align: "right", strong: true, render: row => formatMoney(row.amount, currency) },
               {
                 key: "budget", label: "Budget", align: "right",
-                render: row => { const { limit } = budgetInfo(row.category); return limit > 0 ? formatMoney(limit, currency) : "—"; },
+                render: row => { const limit = Number(state.budgets[row.category]) || 0; return limit > 0 ? formatMoney(limit, currency) : "—"; },
               },
               {
                 key: "remaining", label: "Remaining", align: "right",
                 render: row => {
-                  const { limit, remaining } = budgetInfo(row.category);
-                  if (limit <= 0) return <span className="text-pr-tertiary">—</span>;
+                  const limit = Number(state.budgets[row.category]) || 0;
+                  if (limit <= 0 || !(row.id in runningRemainingById)) return <span className="text-pr-tertiary">—</span>;
+                  const remaining = runningRemainingById[row.id];
                   const tone = remaining < 0 ? "text-pr-danger" : remaining <= limit * 0.1 ? "text-pr-warning" : "text-pr-primary";
                   return <span className={tone}>{formatMoney(remaining, currency)}</span>;
                 },
