@@ -76,18 +76,18 @@ export default function App() {
   }
   if (loadError) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-3 text-center px-6">
-        <AlertCircle className="w-8 h-8 text-red-500" />
-        <p className="text-text font-medium">Couldn't load your data</p>
-        <p className="text-sm text-muted">Please refresh the page to try again.</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 text-center px-6 bg-pr-page">
+        <AlertCircle className="w-8 h-8 text-pr-danger" />
+        <p className="text-pr-primary font-medium">Couldn't load your data</p>
+        <p className="text-sm text-pr-secondary">Please refresh the page to try again.</p>
       </div>
     );
   }
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-3" role="status">
-        <Loader2 className="w-6 h-6 text-primary animate-spin" aria-hidden="true" />
-        <p className="text-sm text-muted">Loading your data…</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-pr-page" role="status">
+        <Loader2 className="w-6 h-6 text-pr-accent animate-spin" aria-hidden="true" />
+        <p className="text-sm text-pr-secondary">Loading your data…</p>
       </div>
     );
   }
