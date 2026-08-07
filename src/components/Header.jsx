@@ -20,7 +20,7 @@ export default function Header({ email, currency, theme, onCurrencyChange, onTog
           value={currency}
           onChange={e => onCurrencyChange(e.target.value)}
           aria-label="Currency"
-          className="bg-surface-2 border border-border-dim rounded-input px-2.5 py-2 text-sm text-text"
+          className="bg-surface-2 border border-border-dim rounded-input px-2.5 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors"
         >
           <option value="$">$ USD</option>
           <option value="€">€ EUR</option>
@@ -28,10 +28,12 @@ export default function Header({ email, currency, theme, onCurrencyChange, onTog
           <option value="₹">₹ INR</option>
         </select>
         <button
-          className="hidden sm:inline-flex items-center gap-1.5 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-3.5 py-2 text-sm font-medium transition-colors"
+          className="inline-flex items-center gap-1.5 bg-transparent hover:bg-surface-2 text-text border border-border-dim rounded-pill px-3.5 py-2 text-sm font-medium transition-colors"
           onClick={onExport}
+          aria-label="Export CSV"
+          title="Export CSV"
         >
-          <Download className="w-4 h-4" /> Export
+          <Download className="w-4 h-4" /> <span className="hidden sm:inline">Export</span>
         </button>
         <div className="flex items-center gap-2 ml-1 sm:ml-2">
           <span className="grid place-items-center w-8 h-8 rounded-pill bg-primary/10 text-primary text-sm font-semibold">

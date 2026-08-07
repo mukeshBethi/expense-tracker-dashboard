@@ -38,6 +38,7 @@ export default function ExpenseTable({ expenses, budgets, expensesThisMonth, cur
 
   return (
     <>
+      <div className="overflow-x-auto">
       <table className="hidden md:table w-full text-sm">
         <thead>
           <tr className="border-b border-border-dim">
@@ -79,6 +80,7 @@ export default function ExpenseTable({ expenses, budgets, expensesThisMonth, cur
           })}
         </tbody>
       </table>
+      </div>
 
       <div className="md:hidden space-y-3">
         {expenses.map(e => (

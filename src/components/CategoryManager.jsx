@@ -30,7 +30,7 @@ export default function CategoryManager({ categories, expenses, onAddCategory, o
         {categories.map(c => (
           <span className="inline-flex items-center gap-1.5 bg-surface-2 text-text text-sm rounded-pill pl-3 pr-2 py-1.5" key={c}>
             {c}
-            <button type="button" title="Remove category" onClick={() => handleRemove(c)}
+            <button type="button" aria-label={`Remove ${c}`} title={`Remove ${c}`} onClick={() => handleRemove(c)}
                     className="p-0.5 rounded-pill hover:bg-surface text-muted hover:text-danger transition-colors">
               <X className="w-3.5 h-3.5" />
             </button>

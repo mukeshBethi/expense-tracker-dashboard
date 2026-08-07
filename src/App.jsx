@@ -144,7 +144,7 @@ export default function App() {
             />
           </div>
         </section>
-        <section className="flex flex-col gap-6">
+        <section className="flex flex-col gap-6 min-w-0">
           <SummaryCards expenses={state.expenses} currency={state.settings.currency} />
           <div className="charts-grid">
             <div className="bg-surface shadow-soft rounded-card p-5 flex flex-col gap-3"><h2 className="text-sm font-semibold text-text mb-1">By Category</h2><CategoryChart expenses={filteredExpenses} currency={state.settings.currency} theme={theme} /></div>
@@ -155,7 +155,7 @@ export default function App() {
               <h2 className="text-sm font-semibold text-text">Expenses</h2>
               <div className="flex gap-2">
                 <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)}
-                        className="bg-surface-2 border border-border-dim rounded-input px-3 py-2 text-sm text-text">
+                        className="bg-surface-2 border border-border-dim rounded-input px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-colors">
                   <option value="">All categories</option>
                   {state.categories.map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
