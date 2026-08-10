@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, SlidersHorizontal } from "lucide-react";
 import { formatMoney } from "../lib/format.js";
 import Combobox from "../components/Combobox.jsx";
 import Select from "../components/ui/Select.jsx";
@@ -8,6 +8,7 @@ import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
 import DataTable from "../components/ui/DataTable.jsx";
 import Toast from "../components/ui/Toast.jsx";
+import Modal from "../components/ui/Modal.jsx";
 import ConfirmModal from "../components/ConfirmModal.jsx";
 
 const SORT_OPTIONS = ["Newest first", "Oldest first", "Amount (high to low)", "Amount (low to high)"];
@@ -30,6 +31,15 @@ export default function ExpensesPage({
   const [search, setSearch] = useState(searchParams.get("q") || "");
   const [sortLabel, setSortLabel] = useState(SORT_OPTIONS[0]);
   const [confirmBulkDeleteIds, setConfirmBulkDeleteIds] = useState(null);
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false);
+
+  const activeFilterCount = (filterCategory ? 1 : 0) + (search ? 1 : 0) + (sortLabel !== SORT_OPTIONS[0] ? 1 : 0);
+
+  function clearFilters() {
+    setFilterCategory("");
+    setSearch("");
+    setSortLabel(SORT_OPTIONS[0]);
+  }
 
   // Running per-transaction "remaining" balance, category-scoped and computed
   // in date-ascending order regardless of the table's chosen display sort —
@@ -72,7 +82,11 @@ export default function ExpensesPage({
 
   return (
     <div className="flex flex-col gap-6 p-6 lg:p-8">
-      <div className="flex flex-col sm:flex-row gap-3 sm:items-end sm:justify-between">
+      {/* Desktop/tablet: filters stay inline, unchanged. Mobile: three
+          full-width controls stacked ahead of any actual data was real
+          "too much chrome before content" -- collapsed into a single
+          trigger + bottom sheet instead, per the mobile UX review. */}
+      <div className="hidden md:flex flex-col sm:flex-row gap-3 sm:items-end sm:justify-between">
         <div className="flex flex-col sm:flex-row gap-3 flex-1">
           <div className="w-full sm:w-52">
             <Combobox options={state.categories} value={filterCategory} onChange={setFilterCategory} allowClear clearLabel="All categories" placeholder="All categories" />
@@ -81,6 +95,32 @@ export default function ExpensesPage({
           <Select value={sortLabel} onChange={e => setSortLabel(e.target.value)} options={SORT_OPTIONS} className="w-full sm:w-52" />
         </div>
       </div>
+      <div className="md:hidden">
+        <Button variant="secondary" icon={SlidersHorizontal} onClick={() => setFilterSheetOpen(true)} className="w-full">
+          Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+        </Button>
+      </div>
+      <Modal
+        open={filterSheetOpen}
+        sheet
+        title="Filters"
+        onClose={() => setFilterSheetOpen(false)}
+        footer={
+          <div className="flex gap-3">
+            <Button variant="secondary" onClick={clearFilters} className="flex-1">Clear all</Button>
+            <Button onClick={() => setFilterSheetOpen(false)} className="flex-1">Done</Button>
+          </div>
+        }
+      >
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wide text-pr-tertiary mb-1.5 block">Category</label>
+            <Combobox options={state.categories} value={filterCategory} onChange={setFilterCategory} allowClear clearLabel="All categories" placeholder="All categories" />
+          </div>
+          <Input label="Search" placeholder="Search notes…" value={search} onChange={e => setSearch(e.target.value)} />
+          <Select label="Sort by" value={sortLabel} onChange={e => setSortLabel(e.target.value)} options={SORT_OPTIONS} />
+        </div>
+      </Modal>
 
       <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         {filteredExpenses.length === 0 ? (
