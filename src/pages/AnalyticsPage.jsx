@@ -89,7 +89,7 @@ export default function AnalyticsPage({ state, theme, expensesThisMonth }) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
-        <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-3">
+        <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-pr-primary">Monthly Trend (6 months)</h2>
           {state.expenses.length === 0 ? (
             <p className="text-sm text-pr-secondary py-8 text-center">No expenses yet.</p>
@@ -97,7 +97,7 @@ export default function AnalyticsPage({ state, theme, expensesThisMonth }) {
             <LineChart series={[{ label: "Spend", color: "#2D63EA", points: months.map(m => m.total) }]} xLabels={months.map(m => m.label)} theme={theme} />
           )}
         </div>
-        <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-3">
+        <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-pr-primary">By Category (This Month)</h2>
           {categoryPieData.length === 0 ? (
             <p className="text-sm text-pr-secondary py-8 text-center">No expenses this month.</p>
@@ -107,7 +107,7 @@ export default function AnalyticsPage({ state, theme, expensesThisMonth }) {
         </div>
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-3">
+      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-pr-primary">Weekly Spend (8 weeks)</h2>
         {state.expenses.length === 0 ? (
           <p className="text-sm text-pr-secondary py-8 text-center">No expenses yet.</p>
@@ -116,7 +116,7 @@ export default function AnalyticsPage({ state, theme, expensesThisMonth }) {
         )}
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-4">
+      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-pr-primary">Budget Utilization</h2>
         {budgetUtilization.length === 0 ? (
           <p className="text-sm text-pr-secondary">No budgets set yet.</p>

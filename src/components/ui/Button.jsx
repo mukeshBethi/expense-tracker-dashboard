@@ -11,7 +11,7 @@ export default function Button({ variant = "primary", icon: Icon, children, onCl
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-pr-default text-sm font-semibold transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed ${VARIANTS[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-1.5 h-10 px-4 rounded-pr-default text-sm font-semibold transition-[background-color,transform] cursor-pointer active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pr-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-pr-page ${VARIANTS[variant]} ${className}`}
       {...rest}
     >
       {Icon && <Icon size={16} />}

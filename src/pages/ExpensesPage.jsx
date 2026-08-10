@@ -83,7 +83,7 @@ export default function ExpensesPage({
         </div>
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-4">
+      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         {filteredExpenses.length === 0 ? (
           <p className="text-sm text-pr-secondary py-8 text-center">
             {state.expenses.length === 0 ? "No expenses yet. Add your first one from the top bar." : "No expenses match the current filters."}

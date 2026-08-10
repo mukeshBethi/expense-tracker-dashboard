@@ -7,7 +7,7 @@ import MobileBottomNav from "./MobileBottomNav.jsx";
 export default function Shell({ children, title, subtitle, email, displayName, onSignOut, theme, toggleTheme, onOpenAdd, monthTotal, totalBudgetShort, budgetUsedPct }) {
   const [collapsed, setCollapsed] = useState(false);
   return (
-    <div className="flex h-screen overflow-hidden bg-pr-page font-[Inter,sans-serif]">
+    <div className="flex h-screen overflow-hidden bg-pr-page">
       <Sidebar
         collapsed={collapsed}
         onToggleCollapse={() => setCollapsed(c => !c)}

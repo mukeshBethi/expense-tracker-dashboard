@@ -3,7 +3,7 @@ import Sparkline from "./Sparkline.jsx";
 
 export default function StatCard({ label, value, delta, trend, spark, accentClass = "text-pr-accent" }) {
   return (
-    <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-2 min-w-0">
+    <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-2 min-w-0">
       <div className="flex items-center justify-between">
         <span className="text-2xl font-semibold text-pr-primary tabular-nums font-mono truncate">{value}</span>
         {delta && (

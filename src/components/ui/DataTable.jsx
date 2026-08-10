@@ -66,7 +66,7 @@ export default function DataTable({ columns, rows, selectable = false, rowsPerPa
                   </td>
                 )}
                 {columns.map(col => (
-                  <td key={col.key} className={`px-3 py-2.5 ${col.align === "right" ? "text-right" : ""} ${col.strong ? "font-medium text-pr-primary" : "text-pr-secondary"}`}>
+                  <td key={col.key} className={`px-3 py-2.5 ${col.align === "right" ? "text-right font-mono tabular-nums" : ""} ${col.strong ? "font-medium text-pr-primary" : "text-pr-secondary"}`}>
                     {col.render ? col.render(row) : row[col.key]}
                   </td>
                 ))}

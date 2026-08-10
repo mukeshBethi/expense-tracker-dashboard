@@ -60,7 +60,7 @@ export default function CategoriesPage({ state, addCategory, removeCategory, toa
         {categories.map(c => {
           const stats = statsByCategory[c] || { count: 0, total: 0 };
           return (
-            <div key={c} className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-3">
+            <div key={c} className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-semibold text-pr-primary truncate" title={c}>{c}</span>
                 <button

@@ -62,7 +62,7 @@ export default function BudgetsPage({ state, expensesThisMonth, setBudget, setTo
         <KpiCard label="Unallocated" value={totalBudget > 0 ? formatMoney(unallocated, currency) : "—"} icon={Coins} />
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-2">
+      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-2">
         <div className="flex items-center justify-between gap-3">
           <span className="text-sm font-medium text-pr-primary">Total Monthly Budget</span>
           <Input
@@ -83,7 +83,7 @@ export default function BudgetsPage({ state, expensesThisMonth, setBudget, setTo
         )}
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-5">
+      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-5">
         <h2 className="text-sm font-semibold text-pr-primary">Category Budgets</h2>
         {categories.map(c => {
           const limit = Number(budgets[c]) || 0;

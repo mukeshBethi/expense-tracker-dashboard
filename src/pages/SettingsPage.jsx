@@ -29,7 +29,7 @@ export default function SettingsPage({
 
   return (
     <div className="flex flex-col gap-6 p-6 lg:p-8 max-w-2xl">
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-4">
+      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-pr-primary">Profile</h2>
         <div className="flex items-end gap-3">
           <Input
@@ -48,7 +48,7 @@ export default function SettingsPage({
         />
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-4">
+      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-pr-primary">Preferences</h2>
         <div className="flex items-center justify-between gap-3">
           <div>
@@ -73,7 +73,7 @@ export default function SettingsPage({
         </div>
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card p-5 flex flex-col gap-3">
+      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-pr-primary">Export Data</h2>
         <p className="text-xs text-pr-tertiary">Download all your expenses as a CSV file.</p>
         <Button icon={Download} onClick={handleExport} className="self-start">Export CSV</Button>

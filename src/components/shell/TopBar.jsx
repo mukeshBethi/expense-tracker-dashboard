@@ -27,10 +27,10 @@ export default function TopBar({ title, subtitle, onOpenAdd, theme, toggleTheme 
           className="w-60 bg-pr-subtle border border-pr-border-default rounded-pr-default pl-9 pr-3 py-2.5 text-sm text-pr-primary placeholder:text-pr-tertiary focus:outline-none focus:ring-2 focus:ring-pr-accent/30"
         />
       </form>
-      <button onClick={toggleTheme} title={theme === "dark" ? "Switch to light" : "Switch to dark"} className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
+      <button onClick={toggleTheme} title={theme === "dark" ? "Switch to light" : "Switch to dark"} aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"} className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
         {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
       </button>
-      <button title="Notifications" className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
+      <button title="Notifications" aria-label="Notifications" className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
         <Bell size={17} />
       </button>
       <button onClick={onOpenAdd} className="hidden lg:inline-flex items-center gap-1.5 h-10 px-4 rounded-pr-default text-sm font-semibold text-white bg-pr-accent hover:bg-pr-accent-hover transition-colors cursor-pointer">
