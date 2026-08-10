@@ -60,7 +60,7 @@ export default function SettingsPage({
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-sm text-pr-primary">Budget Alerts</p>
-            <p className="text-xs text-pr-tertiary">Saved preference only — doesn't affect the Dashboard's over-budget banner yet.</p>
+            <p className="text-xs text-pr-tertiary">Show a warning on the Dashboard when a category goes over budget.</p>
           </div>
           <Switch checked={settings.budgetAlertsEnabled} onChange={v => { setBudgetAlertsEnabled(v); setToastMessage("Budget alerts preference saved."); }} />
         </div>

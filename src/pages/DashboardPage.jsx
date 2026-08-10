@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { TrendingUp, Wallet, Tag, Receipt, Pencil, Trash2 } from "lucide-react";
+import { TrendingUp, Wallet, Tag, Receipt, Pencil, Trash2, Plus } from "lucide-react";
 import { formatMoney } from "../lib/format.js";
 import KpiCard from "../components/ui/KpiCard.jsx";
 import ProgressBar from "../components/ui/ProgressBar.jsx";
@@ -8,6 +8,7 @@ import LineChart from "../components/ui/LineChart.jsx";
 import PieChart from "../components/ui/PieChart.jsx";
 import Alert from "../components/ui/Alert.jsx";
 import Toast from "../components/ui/Toast.jsx";
+import Button from "../components/ui/Button.jsx";
 import ConfirmModal from "../components/ConfirmModal.jsx";
 
 const VIZ_PALETTE = ["#2D63EA", "#16A34A", "#D97706", "#E11D48", "#7C3AED", "#0891B2", "#EA580C", "#4A6290"];
@@ -112,9 +113,35 @@ export default function DashboardPage({
     [state.expenses]
   );
 
+  // A pending Toast (e.g. "Expense deleted.") must still render even if this
+  // action just emptied the list -- so the empty state is a branch of the
+  // main return, not an early return that would skip the Toast/ConfirmModal
+  // rendered at the bottom of this component.
+  const isEmpty = state.expenses.length === 0;
+
+  if (isEmpty) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-20 px-6 text-center">
+        <div className="w-16 h-16 rounded-full bg-pr-accent/10 flex items-center justify-center">
+          <Receipt size={28} className="text-pr-accent" />
+        </div>
+        <div>
+          <h2 className="text-lg font-semibold text-pr-primary mb-1">Welcome to Spendly</h2>
+          <p className="text-sm text-pr-secondary max-w-sm">Add your first expense to start seeing where your money goes.</p>
+        </div>
+        <Button icon={Plus} onClick={() => openExpenseModal(null)}>Add your first expense</Button>
+        {toastMessage && (
+          <div className="fixed bottom-6 right-6 z-50">
+            <Toast tone="success" title={toastMessage} onClose={dismissToast} />
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6 p-6 lg:p-8">
-      {overBudgetCategories.length > 0 && (
+      {state.settings.budgetAlertsEnabled && overBudgetCategories.length > 0 && (
         <Alert tone="danger" title="Over budget this month">{overBudgetCategories.join(", ")}</Alert>
       )}
 
@@ -131,11 +158,7 @@ export default function DashboardPage({
       <div className="order-4 lg:order-2 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
         <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-pr-primary">14-Day Trend</h2>
-          {state.expenses.length === 0 ? (
-            <p className="text-sm text-pr-secondary py-8 text-center">No expenses yet.</p>
-          ) : (
-            <LineChart series={[{ label: "Spend", color: "#2D63EA", points: trendSeries.points }]} xLabels={trendSeries.labels} theme={theme} />
-          )}
+          <LineChart series={[{ label: "Spend", color: "#2D63EA", points: trendSeries.points }]} xLabels={trendSeries.labels} theme={theme} />
         </div>
         <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-pr-primary">By Category (This Month)</h2>
