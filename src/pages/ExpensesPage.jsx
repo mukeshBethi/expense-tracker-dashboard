@@ -112,11 +112,11 @@ export default function ExpensesPage({
                 key: "actions", label: "", align: "right",
                 render: row => (
                   <div className="flex items-center justify-end gap-2">
-                    <button onClick={() => openExpenseModal(row)} aria-label="Edit" className="w-8 h-8 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
-                      <Pencil size={14} />
+                    <button onClick={() => openExpenseModal(row)} aria-label="Edit" className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
+                      <Pencil size={16} />
                     </button>
-                    <button onClick={() => setConfirmDeleteId(row.id)} aria-label="Delete" className="w-8 h-8 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-danger-soft hover:text-pr-danger transition-colors cursor-pointer">
-                      <Trash2 size={14} />
+                    <button onClick={() => setConfirmDeleteId(row.id)} aria-label="Delete" className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-danger-soft hover:text-pr-danger transition-colors cursor-pointer">
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 ),

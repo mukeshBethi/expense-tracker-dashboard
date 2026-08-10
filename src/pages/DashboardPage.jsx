@@ -118,14 +118,17 @@ export default function DashboardPage({
         <Alert tone="danger" title="Over budget this month">{overBudgetCategories.join(", ")}</Alert>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="order-1 grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard label="Spent This Month" value={formatMoney(monthTotal, currency)} delta={monthDelta?.text} trend={monthDelta?.trend} icon={TrendingUp} />
         <KpiCard label="Budget Remaining" value={totalBudget > 0 ? formatMoney(budgetRemaining, currency) : "No budget set"} icon={Wallet} />
         <KpiCard label="Top Category" value={topCategory} icon={Tag} />
         <KpiCard label="Entries Logged" value={state.expenses.length} icon={Receipt} />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
+      {/* Mobile-only reorder: Recent Transactions (checked constantly) surfaces
+          above the charts (browsed occasionally) via `order`, without
+          touching desktop's layout at all -- see the mobile UX review. */}
+      <div className="order-4 lg:order-2 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
         <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-pr-primary">14-Day Trend</h2>
           {state.expenses.length === 0 ? (
@@ -144,7 +147,7 @@ export default function DashboardPage({
         </div>
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
+      <div className="order-3 bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-pr-primary">Budget Health</h2>
         {budgetHealth.length === 0 ? (
           <p className="text-sm text-pr-secondary">No budgets set yet.</p>
@@ -155,7 +158,7 @@ export default function DashboardPage({
         )}
       </div>
 
-      <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
+      <div className="order-2 lg:order-4 bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-pr-primary">Recent Transactions</h2>
         <DataTable
           columns={[
@@ -167,11 +170,11 @@ export default function DashboardPage({
               key: "actions", label: "", align: "right",
               render: row => (
                 <div className="flex items-center justify-end gap-2">
-                  <button onClick={() => openExpenseModal(row)} aria-label="Edit" className="w-8 h-8 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
-                    <Pencil size={14} />
+                  <button onClick={() => openExpenseModal(row)} aria-label="Edit" className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
+                    <Pencil size={16} />
                   </button>
-                  <button onClick={() => setConfirmDeleteId(row.id)} aria-label="Delete" className="w-8 h-8 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-danger-soft hover:text-pr-danger transition-colors cursor-pointer">
-                    <Trash2 size={14} />
+                  <button onClick={() => setConfirmDeleteId(row.id)} aria-label="Delete" className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-danger-soft hover:text-pr-danger transition-colors cursor-pointer">
+                    <Trash2 size={16} />
                   </button>
                 </div>
               ),

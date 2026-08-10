@@ -65,9 +65,9 @@ export default function CategoriesPage({ state, addCategory, removeCategory, toa
                 <span className="text-sm font-semibold text-pr-primary truncate" title={c}>{c}</span>
                 <button
                   onClick={() => handleRequestRemove(c)} aria-label={`Remove ${c}`} title={`Remove ${c}`}
-                  className="w-8 h-8 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-danger-soft hover:text-pr-danger transition-colors cursor-pointer flex-shrink-0"
+                  className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary hover:bg-pr-danger-soft hover:text-pr-danger transition-colors cursor-pointer flex-shrink-0"
                 >
-                  <Trash2 size={14} />
+                  <Trash2 size={16} />
                 </button>
               </div>
               <p className="text-xs text-pr-tertiary">
