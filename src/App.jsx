@@ -101,7 +101,7 @@ export default function App() {
 
   const dashboardProps = { state, theme, expensesThisMonth, ...sharedExpenseModalProps };
   const expensesProps = { state, expensesThisMonth, deleteExpenses, ...sharedExpenseModalProps };
-  const budgetsProps = { state, expensesThisMonth, setBudget, setTotalBudget };
+  const budgetsProps = { state, expensesThisMonth, setBudget, setTotalBudget, toastMessage, dismissToast, setToastMessage };
   const categoriesProps = { state, addCategory, removeCategory, toastMessage, dismissToast, setToastMessage };
   const analyticsProps = { state, theme, expensesThisMonth };
   const settingsProps = { state, theme, toggleTheme, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, handleExport, toastMessage, dismissToast, setToastMessage };

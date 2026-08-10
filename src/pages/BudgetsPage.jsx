@@ -5,8 +5,9 @@ import { formatMoney } from "../lib/format.js";
 import KpiCard from "../components/ui/KpiCard.jsx";
 import Input from "../components/ui/Input.jsx";
 import ProgressBar from "../components/ui/ProgressBar.jsx";
+import Toast from "../components/ui/Toast.jsx";
 
-export default function BudgetsPage({ state, expensesThisMonth, setBudget, setTotalBudget }) {
+export default function BudgetsPage({ state, expensesThisMonth, setBudget, setTotalBudget, toastMessage, dismissToast, setToastMessage }) {
   const { categories, budgets, settings } = state;
   const currency = settings.currency;
   const totalBudget = settings.totalBudget || 0;
@@ -37,7 +38,10 @@ export default function BudgetsPage({ state, expensesThisMonth, setBudget, setTo
       delete next[category];
       return next;
     });
+    const prevLimit = Number(budgets[category]) || 0;
+    const nextLimit = Number(rawValue) || 0;
     setBudget(category, rawValue);
+    if (nextLimit !== prevLimit) setToastMessage(`${category} budget saved.`);
   }
 
   function handleTotalChange(rawValue) {
@@ -51,7 +55,9 @@ export default function BudgetsPage({ state, expensesThisMonth, setBudget, setTo
       }
     }
     setTotalError("");
+    const nextTotal = Number(rawValue) || 0;
     setTotalBudget(rawValue);
+    if (nextTotal !== totalBudget) setToastMessage("Total budget saved.");
   }
 
   return (
@@ -110,6 +116,12 @@ export default function BudgetsPage({ state, expensesThisMonth, setBudget, setTo
           );
         })}
       </div>
+
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Toast tone="success" title={toastMessage} onClose={dismissToast} />
+        </div>
+      )}
     </div>
   );
 }
