@@ -142,6 +142,7 @@ export default function App() {
       <ExpenseFormModal
         open={isExpenseModalOpen}
         categories={state.categories}
+        expenses={state.expenses}
         editingExpense={editingExpense}
         onSubmit={handleFormSubmit}
         onClose={closeExpenseModal}

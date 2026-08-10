@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { validateDate, validateAmount, validateCategory } from "../lib/validation.js";
 import { formatAmountInput, parseAmountInput } from "../lib/format.js";
 import Combobox from "./Combobox.jsx";
@@ -11,12 +11,25 @@ function todayISO() {
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 }
 
-export default function ExpenseFormModal({ open, categories, editingExpense, onSubmit, onClose }) {
+const QUICK_CATEGORY_COUNT = 5;
+
+export default function ExpenseFormModal({ open, categories, expenses, editingExpense, onSubmit, onClose }) {
   const [date, setDate] = useState(todayISO());
   const [amountDisplay, setAmountDisplay] = useState("");
   const [category, setCategory] = useState(categories[0] || "");
   const [note, setNote] = useState("");
   const [errors, setErrors] = useState({});
+  const amountInputRef = useRef(null);
+
+  // Most-frequently-used categories stand in for "recent" here -- there's no
+  // per-use timestamp tracked today, and frequency is a reasonable proxy for
+  // the categories someone actually taps over and over (coffee, groceries,
+  // gas), which is exactly what a one-tap shortcut should target.
+  const quickCategories = useMemo(() => {
+    const counts = {};
+    for (const e of expenses || []) counts[e.category] = (counts[e.category] || 0) + 1;
+    return [...categories].sort((a, b) => (counts[b] || 0) - (counts[a] || 0)).slice(0, QUICK_CATEGORY_COUNT);
+  }, [categories, expenses]);
 
   useEffect(() => {
     if (!open) return;
@@ -32,6 +45,9 @@ export default function ExpenseFormModal({ open, categories, editingExpense, onS
       setNote("");
     }
     setErrors({});
+    // Focus after the sheet/modal has actually mounted, not mid-render.
+    const id = requestAnimationFrame(() => amountInputRef.current?.focus());
+    return () => cancelAnimationFrame(id);
   }, [open, editingExpense, categories]);
 
   function handleAmountChange(evt) {
@@ -56,6 +72,7 @@ export default function ExpenseFormModal({ open, categories, editingExpense, onS
   return (
     <Modal
       open={open}
+      sheet
       title={editingExpense ? "Edit Expense" : "Add Expense"}
       onClose={onClose}
       footer={
@@ -66,13 +83,35 @@ export default function ExpenseFormModal({ open, categories, editingExpense, onS
       }
     >
       <form id="expense-form-modal" onSubmit={handleSubmit} autoComplete="off" className="flex flex-col gap-4">
-        <Input label="Date" type="date" max={todayISO()} value={date} onChange={e => setDate(e.target.value)} error={errors.date} />
-        <Input label="Amount" type="text" inputMode="decimal" placeholder="0.00" value={amountDisplay} onChange={handleAmountChange} error={errors.amount} />
+        <Input
+          ref={amountInputRef}
+          label="Amount" type="text" inputMode="decimal" placeholder="0.00"
+          value={amountDisplay} onChange={handleAmountChange} error={errors.amount}
+        />
         <div>
           <label className="text-xs font-semibold uppercase tracking-wide text-pr-tertiary mb-1.5 block">Category</label>
+          {quickCategories.length > 0 && (
+            <div className="flex gap-2 overflow-x-auto pb-2 -mx-0.5 px-0.5">
+              {quickCategories.map(c => (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCategory(c)}
+                  className={`flex-shrink-0 px-3 py-1.5 rounded-pr-pill text-xs font-medium border transition-colors cursor-pointer whitespace-nowrap ${
+                    category === c
+                      ? "bg-pr-accent text-white border-pr-accent"
+                      : "bg-pr-subtle text-pr-secondary border-pr-border-default hover:text-pr-primary"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          )}
           <Combobox options={categories} value={category} onChange={setCategory} placeholder="Select a category…" />
           {errors.category && <p className="text-xs text-pr-danger mt-1">{errors.category}</p>}
         </div>
+        <Input label="Date" type="date" max={todayISO()} value={date} onChange={e => setDate(e.target.value)} error={errors.date} />
         <Input label="Note" type="text" maxLength={120} placeholder="e.g. Lunch with team" value={note} onChange={e => setNote(e.target.value)} helper="Optional" />
       </form>
     </Modal>
