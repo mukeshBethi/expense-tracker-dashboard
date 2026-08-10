@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
+import { Repeat } from "lucide-react";
 import { validateDate, validateAmount, validateCategory } from "../lib/validation.js";
 import { formatAmountInput, parseAmountInput } from "../lib/format.js";
 import Combobox from "./Combobox.jsx";
@@ -13,11 +14,12 @@ function todayISO() {
 
 const QUICK_CATEGORY_COUNT = 5;
 
-export default function ExpenseFormModal({ open, categories, expenses, editingExpense, onSubmit, onClose }) {
+export default function ExpenseFormModal({ open, categories, expenses, templates, editingExpense, onSubmit, onSaveTemplate, onClose }) {
   const [date, setDate] = useState(todayISO());
   const [amountDisplay, setAmountDisplay] = useState("");
   const [category, setCategory] = useState(categories[0] || "");
   const [note, setNote] = useState("");
+  const [saveAsTemplate, setSaveAsTemplate] = useState(false);
   const [errors, setErrors] = useState({});
   const amountInputRef = useRef(null);
 
@@ -44,6 +46,7 @@ export default function ExpenseFormModal({ open, categories, expenses, editingEx
       setCategory(categories[0] || "");
       setNote("");
     }
+    setSaveAsTemplate(false);
     setErrors({});
     // Focus after the sheet/modal has actually mounted, not mid-render.
     const id = requestAnimationFrame(() => amountInputRef.current?.focus());
@@ -52,6 +55,12 @@ export default function ExpenseFormModal({ open, categories, expenses, editingEx
 
   function handleAmountChange(evt) {
     setAmountDisplay(formatAmountInput(evt.target.value));
+  }
+
+  function applyTemplate(t) {
+    setCategory(t.category);
+    setAmountDisplay(formatAmountInput(String(t.amount)));
+    setNote(t.note || "");
   }
 
   function handleSubmit(evt) {
@@ -65,7 +74,11 @@ export default function ExpenseFormModal({ open, categories, expenses, editingEx
     setErrors(nextErrors);
     if (Object.values(nextErrors).some(Boolean)) return;
 
-    onSubmit({ date, amount, category, note: note.trim() });
+    const trimmedNote = note.trim();
+    onSubmit({ date, amount, category, note: trimmedNote });
+    if (saveAsTemplate && !editingExpense && onSaveTemplate) {
+      onSaveTemplate({ label: category, category, amount, note: trimmedNote });
+    }
     onClose();
   }
 
@@ -83,6 +96,23 @@ export default function ExpenseFormModal({ open, categories, expenses, editingEx
       }
     >
       <form id="expense-form-modal" onSubmit={handleSubmit} autoComplete="off" className="flex flex-col gap-4">
+        {!editingExpense && templates && templates.length > 0 && (
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wide text-pr-tertiary mb-1.5 block">Quick add</label>
+            <div className="flex gap-2 overflow-x-auto pb-1 -mx-0.5 px-0.5">
+              {templates.map(t => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => applyTemplate(t)}
+                  className="flex-shrink-0 px-3 py-1.5 rounded-pr-pill text-xs font-medium border border-pr-border-default bg-pr-subtle text-pr-secondary hover:text-pr-primary transition-colors cursor-pointer whitespace-nowrap"
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         <Input
           ref={amountInputRef}
           label="Amount" type="text" inputMode="decimal" placeholder="0.00"
@@ -113,6 +143,15 @@ export default function ExpenseFormModal({ open, categories, expenses, editingEx
         </div>
         <Input label="Date" type="date" max={todayISO()} value={date} onChange={e => setDate(e.target.value)} error={errors.date} />
         <Input label="Note" type="text" maxLength={120} placeholder="e.g. Lunch with team" value={note} onChange={e => setNote(e.target.value)} helper="Optional" />
+        {!editingExpense && (
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" checked={saveAsTemplate} onChange={e => setSaveAsTemplate(e.target.checked)} className="cursor-pointer" />
+            <span className="text-sm text-pr-secondary">
+              <Repeat size={13} className="inline mr-1 -mt-0.5" />
+              Save as a quick-add template for next time
+            </span>
+          </label>
+        )}
       </form>
     </Modal>
   );

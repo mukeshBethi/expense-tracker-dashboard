@@ -6,6 +6,7 @@ const DEFAULT_STATE = {
   expenses: [],
   budgets: {},
   categories: [...DEFAULT_CATEGORIES],
+  recurringTemplates: [],
   settings: { currency: "$", theme: "dark", totalBudget: 0, displayName: "", budgetAlertsEnabled: true, weeklySummaryEnabled: false },
 };
 
@@ -34,6 +35,7 @@ export function useExpenseData(uid) {
         settings: { currency: "$", theme: "dark", totalBudget: 0, displayName: "", budgetAlertsEnabled: true, weeklySummaryEnabled: false, ...(data.settings || {}) },
         categories: Array.isArray(data.categories) && data.categories.length ? data.categories : [...DEFAULT_CATEGORIES],
         budgets: data.budgets || {},
+        recurringTemplates: Array.isArray(data.recurringTemplates) ? data.recurringTemplates : [],
         expenses: Array.isArray(data.expenses) ? data.expenses : [],
       });
       setLoading(false);
@@ -59,6 +61,7 @@ export function useExpenseData(uid) {
       settings: next.settings,
       categories: next.categories,
       budgets: next.budgets,
+      recurringTemplates: next.recurringTemplates,
     }, { merge: true });
   }, []);
 
@@ -177,6 +180,24 @@ export function useExpenseData(uid) {
     });
   }, [persistProfile]);
 
+  const addRecurringTemplate = useCallback((template) => {
+    setState(prev => {
+      const recurringTemplates = [...prev.recurringTemplates, { id: crypto.randomUUID(), ...template }];
+      const next = { ...prev, recurringTemplates };
+      persistProfile(next).catch(err => console.error("Failed to save recurring template:", err));
+      return next;
+    });
+  }, [persistProfile]);
+
+  const removeRecurringTemplate = useCallback((id) => {
+    setState(prev => {
+      const recurringTemplates = prev.recurringTemplates.filter(t => t.id !== id);
+      const next = { ...prev, recurringTemplates };
+      persistProfile(next).catch(err => console.error("Failed to remove recurring template:", err));
+      return next;
+    });
+  }, [persistProfile]);
+
   const setThemePreference = useCallback((theme) => {
     setState(prev => {
       const settings = { ...prev.settings, theme };
@@ -192,6 +213,7 @@ export function useExpenseData(uid) {
         expenses: [],
         budgets: {},
         categories: [...DEFAULT_CATEGORIES],
+        recurringTemplates: [],
         settings: { ...prev.settings },
       };
       persistExpenses(next.expenses).catch(err => console.error("Failed to clear expenses:", err));
@@ -200,5 +222,5 @@ export function useExpenseData(uid) {
     });
   }, [persistExpenses, persistProfile]);
 
-  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, setTotalBudget, setThemePreference, clearAll };
+  return { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, setTotalBudget, setThemePreference, addRecurringTemplate, removeRecurringTemplate, clearAll };
 }

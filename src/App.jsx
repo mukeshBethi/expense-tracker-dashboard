@@ -23,7 +23,7 @@ function monthKey(iso) { return iso.slice(0, 7); }
 
 export default function App() {
   const { user, authLoading, signIn, signUp, signOutUser, authError, clearAuthError } = useAuth();
-  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, setTotalBudget, setThemePreference } = useExpenseData(user?.uid);
+  const { state, loading, loadError, addExpense, updateExpense, deleteExpense, deleteExpenses, addCategory, removeCategory, setBudget, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, setTotalBudget, setThemePreference, addRecurringTemplate, removeRecurringTemplate } = useExpenseData(user?.uid);
   const { theme, toggleTheme } = useTheme(state.settings.theme, setThemePreference);
 
   const [editingExpense, setEditingExpense] = useState(null);
@@ -104,7 +104,7 @@ export default function App() {
   const budgetsProps = { state, expensesThisMonth, setBudget, setTotalBudget, toastMessage, dismissToast, setToastMessage };
   const categoriesProps = { state, addCategory, removeCategory, toastMessage, dismissToast, setToastMessage };
   const analyticsProps = { state, theme, expensesThisMonth };
-  const settingsProps = { state, theme, toggleTheme, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, handleExport, toastMessage, dismissToast, setToastMessage };
+  const settingsProps = { state, theme, toggleTheme, setCurrency, setDisplayName, setBudgetAlertsEnabled, setWeeklySummaryEnabled, handleExport, removeRecurringTemplate, toastMessage, dismissToast, setToastMessage };
 
   const monthTotalRaw = expensesThisMonth.reduce((sum, e) => sum + e.amount, 0);
   const totalBudget = state.settings.totalBudget || 0;
@@ -143,6 +143,8 @@ export default function App() {
         open={isExpenseModalOpen}
         categories={state.categories}
         expenses={state.expenses}
+        templates={state.recurringTemplates}
+        onSaveTemplate={addRecurringTemplate}
         editingExpense={editingExpense}
         onSubmit={handleFormSubmit}
         onClose={closeExpenseModal}
