@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import Input from "./ui/Input.jsx";
 import Button from "./ui/Button.jsx";
 
@@ -7,6 +8,7 @@ export default function AuthScreen({ onSignIn, onSignUp, authError, clearAuthErr
   const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(evt) {
@@ -61,9 +63,19 @@ export default function AuthScreen({ onSignIn, onSignUp, authError, clearAuthErr
             value={email} onChange={e => setEmail(e.target.value)}
           />
           <Input
-            label="Password" id="auth-password" type="password" required minLength={6}
+            label="Password" id="auth-password" type={showPassword ? "text" : "password"} required minLength={6}
             autoComplete={mode === "signin" ? "current-password" : "new-password"}
             value={password} onChange={e => setPassword(e.target.value)}
+            suffix={
+              <button
+                type="button"
+                onClick={() => setShowPassword(s => !s)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="w-8 h-8 flex items-center justify-center text-pr-tertiary hover:text-pr-primary transition-colors cursor-pointer"
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            }
           />
           <Button type="submit" disabled={submitting} className="w-full">
             {mode === "signin" ? "Sign In" : "Create Account"}
