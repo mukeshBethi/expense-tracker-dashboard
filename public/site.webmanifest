@@ -1,0 +1,16 @@
+{
+  "name": "Spendly",
+  "short_name": "Spendly",
+  "description": "Know where your money goes.",
+  "icons": [
+    {
+      "src": "/brand/app-icon.png",
+      "sizes": "543x533",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#0A0F1C",
+  "background_color": "#0A0F1C",
+  "display": "standalone",
+  "start_url": "/"
+}

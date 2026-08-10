@@ -10,16 +10,17 @@ const NAV_ITEMS = [
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
-export default function Sidebar({ collapsed, onToggleCollapse, email, displayName, onSignOut, monthTotal, totalBudgetShort, budgetUsedPct }) {
+export default function Sidebar({ collapsed, onToggleCollapse, email, displayName, onSignOut, theme, monthTotal, totalBudgetShort, budgetUsedPct }) {
   const identityLabel = displayName || email;
+  const iconSrc = theme === "light" ? "/brand/icon-light.png" : "/brand/icon-dark.png";
   return (
     <aside className={`hidden lg:flex flex-col h-full bg-pr-card border-r border-pr-border-default transition-[width] duration-200 overflow-hidden ${collapsed ? "w-[72px]" : "w-[236px]"}`}>
       <div className={`flex items-center gap-3 px-4 pt-5 pb-4 ${collapsed ? "justify-center" : ""}`}>
-        <div className="w-[30px] h-[30px] rounded-pr-default bg-pr-accent flex items-center justify-center text-white font-semibold text-sm flex-shrink-0">S</div>
+        <img src={iconSrc} alt="Spendly" className="h-8 w-auto flex-shrink-0" />
         {!collapsed && (
           <div className="flex flex-col min-w-0 overflow-hidden whitespace-nowrap">
             <span className="text-pr-primary font-semibold text-[15px] leading-none">Spendly</span>
-            <span className="text-pr-tertiary text-[11px] leading-none">Know where your money goes</span>
+            <span className="text-pr-tertiary text-[11px] leading-none">Know where your money goes.</span>
           </div>
         )}
       </div>

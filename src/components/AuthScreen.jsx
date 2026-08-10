@@ -2,7 +2,8 @@ import { useState } from "react";
 import Input from "./ui/Input.jsx";
 import Button from "./ui/Button.jsx";
 
-export default function AuthScreen({ onSignIn, onSignUp, authError, clearAuthError }) {
+export default function AuthScreen({ onSignIn, onSignUp, authError, clearAuthError, theme }) {
+  const iconSrc = theme === "light" ? "/brand/icon-light.png" : "/brand/icon-dark.png";
   const [mode, setMode] = useState("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,9 +31,9 @@ export default function AuthScreen({ onSignIn, onSignUp, authError, clearAuthErr
     <div className="min-h-screen flex items-center justify-center bg-pr-page px-4">
       <div className="w-full max-w-sm bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-6 sm:p-8">
         <div className="text-center mb-6">
-          <span className="inline-grid place-items-center w-12 h-12 rounded-pr-default bg-pr-accent text-white font-bold text-2xl mb-4">$</span>
-          <h1 className="text-xl font-semibold text-pr-primary mb-1">Expense Tracker</h1>
-          <p className="text-sm text-pr-secondary">Track spending. Stay on budget.</p>
+          <img src={iconSrc} alt="Spendly" className="h-12 w-auto mx-auto mb-4" />
+          <h1 className="text-xl font-semibold text-pr-primary mb-1">Spendly</h1>
+          <p className="text-sm text-pr-secondary">Know where your money goes.</p>
         </div>
 
         <div className="inline-flex w-full bg-pr-subtle rounded-pr-pill p-1 mb-5">

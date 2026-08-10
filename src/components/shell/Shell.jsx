@@ -14,6 +14,7 @@ export default function Shell({ children, title, subtitle, email, displayName, o
         email={email}
         displayName={displayName}
         onSignOut={onSignOut}
+        theme={theme}
         monthTotal={monthTotal}
         totalBudgetShort={totalBudgetShort}
         budgetUsedPct={budgetUsedPct}

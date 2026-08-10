@@ -72,7 +72,7 @@ export default function App() {
 
   if (authLoading) return null;
   if (!user) {
-    return <AuthScreen onSignIn={signIn} onSignUp={signUp} authError={authError} clearAuthError={clearAuthError} />;
+    return <AuthScreen onSignIn={signIn} onSignUp={signUp} authError={authError} clearAuthError={clearAuthError} theme={theme} />;
   }
   if (loadError) {
     return (
@@ -112,7 +112,7 @@ export default function App() {
   return (
     <Shell
       title="Spendly"
-      subtitle="Know where your money goes"
+      subtitle="Know where your money goes."
       email={user.email}
       displayName={state.settings.displayName}
       onSignOut={signOutUser}
