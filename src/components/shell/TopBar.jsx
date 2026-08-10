@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Bell, Plus, Sun, Moon } from "lucide-react";
+import { Search, Plus, Sun, Moon } from "lucide-react";
 
 export default function TopBar({ title, subtitle, onOpenAdd, theme, toggleTheme }) {
   const navigate = useNavigate();
@@ -29,9 +29,6 @@ export default function TopBar({ title, subtitle, onOpenAdd, theme, toggleTheme 
       </form>
       <button onClick={toggleTheme} title={theme === "dark" ? "Switch to light" : "Switch to dark"} aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"} className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
         {theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
-      </button>
-      <button title="Notifications" aria-label="Notifications" className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
-        <Bell size={17} />
       </button>
       <button onClick={onOpenAdd} className="hidden lg:inline-flex items-center gap-1.5 h-10 px-4 rounded-pr-default text-sm font-semibold text-white bg-pr-accent hover:bg-pr-accent-hover transition-colors cursor-pointer">
         <Plus size={16} /> Add expense
