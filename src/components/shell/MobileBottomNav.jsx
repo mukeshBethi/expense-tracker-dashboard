@@ -1,10 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, FileText, TrendingUp, MoreHorizontal, Package, Grid, Settings, LogOut } from "lucide-react";
+import { Home, FileText, TrendingUp, MoreHorizontal, Package, Grid, Settings, LogOut, Plus } from "lucide-react";
 
-const PRIMARY_ITEMS = [
+const LEFT_ITEMS = [
   { to: "/", label: "Home", icon: Home },
   { to: "/expenses", label: "Expenses", icon: FileText },
+];
+
+const RIGHT_ITEMS = [
   { to: "/analytics", label: "Insights", icon: TrendingUp },
 ];
 
@@ -14,7 +17,7 @@ const MORE_ITEMS = [
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
-export default function MobileBottomNav({ email, displayName, onSignOut }) {
+export default function MobileBottomNav({ email, displayName, onSignOut, onOpenAdd }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const containerRef = useRef(null);
@@ -70,8 +73,31 @@ export default function MobileBottomNav({ email, displayName, onSignOut }) {
           </button>
         </div>
       )}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 grid grid-cols-4 gap-1 px-3 py-2.5 bg-pr-card border-t border-pr-border-subtle">
-        {PRIMARY_ITEMS.map(({ to, label, icon: Icon }) => (
+      <nav className="fixed bottom-0 left-0 right-0 z-30 grid grid-cols-5 gap-1 px-3 py-2.5 bg-pr-card border-t border-pr-border-subtle">
+        {LEFT_ITEMS.map(({ to, label, icon: Icon }) => (
+          <NavLink key={to} to={to} end={to === "/"} className={({ isActive }) => `flex flex-col items-center gap-1 py-2 cursor-pointer ${isActive ? "text-pr-accent" : "text-pr-tertiary"}`}>
+            <Icon size={19} />
+            <span className="text-[10.5px] font-medium">{label}</span>
+          </NavLink>
+        ))}
+
+        {/* Raised center "+" -- Add Expense is the single most frequent
+            action in the app, so it gets the easiest one-handed thumb-reach
+            slot (bottom-center) and reads unambiguously as "the" primary
+            action, rather than a corner-floating button that could visually
+            compete with page content or the More panel. */}
+        <div className="flex items-center justify-center">
+          <button
+            type="button"
+            onClick={onOpenAdd}
+            aria-label="Add expense"
+            className="relative -mt-6 w-14 h-14 rounded-full bg-pr-accent hover:bg-pr-accent-hover text-white shadow-pr-lg flex items-center justify-center cursor-pointer transition-colors"
+          >
+            <Plus size={24} />
+          </button>
+        </div>
+
+        {RIGHT_ITEMS.map(({ to, label, icon: Icon }) => (
           <NavLink key={to} to={to} end={to === "/"} className={({ isActive }) => `flex flex-col items-center gap-1 py-2 cursor-pointer ${isActive ? "text-pr-accent" : "text-pr-tertiary"}`}>
             <Icon size={19} />
             <span className="text-[10.5px] font-medium">{label}</span>
