@@ -33,7 +33,7 @@ export default function TopBar({ title, subtitle, onOpenAdd, theme, toggleTheme 
       <button title="Notifications" className="w-10 h-10 flex items-center justify-center rounded-pr-default text-pr-secondary bg-pr-subtle hover:text-pr-primary transition-colors cursor-pointer">
         <Bell size={17} />
       </button>
-      <button onClick={onOpenAdd} className="inline-flex items-center gap-1.5 h-10 px-4 rounded-pr-default text-sm font-semibold text-white bg-pr-accent hover:bg-pr-accent-hover transition-colors cursor-pointer">
+      <button onClick={onOpenAdd} className="hidden lg:inline-flex items-center gap-1.5 h-10 px-4 rounded-pr-default text-sm font-semibold text-white bg-pr-accent hover:bg-pr-accent-hover transition-colors cursor-pointer">
         <Plus size={16} /> Add expense
       </button>
     </header>

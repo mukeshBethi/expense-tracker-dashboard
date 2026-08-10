@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import Sidebar from "./Sidebar.jsx";
 import TopBar from "./TopBar.jsx";
 import MobileBottomNav from "./MobileBottomNav.jsx";
@@ -23,6 +24,19 @@ export default function Shell({ children, title, subtitle, email, displayName, o
           {children}
         </div>
       </main>
+      {/* Mobile-only floating action button — the TopBar's "Add expense" button
+          is hidden below lg (it doesn't fit the cramped mobile header), so this
+          is its mobile replacement, not a duplicate. Sits above MobileBottomNav
+          (which is ~64px tall) with clearance to spare, and below the "More"
+          menu's z-index so an open More panel visually covers it instead of
+          the FAB poking out over the panel. */}
+      <button
+        onClick={onOpenAdd}
+        aria-label="Add expense"
+        className="lg:hidden fixed bottom-20 right-4 z-[35] w-14 h-14 rounded-full bg-pr-accent hover:bg-pr-accent-hover text-white shadow-pr-lg flex items-center justify-center cursor-pointer transition-colors"
+      >
+        <Plus size={24} />
+      </button>
       <MobileBottomNav />
     </div>
   );
