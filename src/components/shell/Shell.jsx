@@ -37,7 +37,7 @@ export default function Shell({ children, title, subtitle, email, displayName, o
       >
         <Plus size={24} />
       </button>
-      <MobileBottomNav />
+      <MobileBottomNav email={email} displayName={displayName} onSignOut={onSignOut} />
     </div>
   );
 }
