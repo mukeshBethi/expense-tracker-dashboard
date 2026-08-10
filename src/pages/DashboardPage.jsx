@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { TrendingUp, Wallet, Tag, Receipt, Pencil, Trash2, Plus } from "lucide-react";
+import { TrendingUp, Wallet, Tag, Receipt, Pencil, Trash2, Plus, CalendarDays, Sparkles } from "lucide-react";
 import { formatMoney } from "../lib/format.js";
 import KpiCard from "../components/ui/KpiCard.jsx";
 import ProgressBar from "../components/ui/ProgressBar.jsx";
@@ -18,10 +18,11 @@ function todayISO() {
   const d = new Date();
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 }
-function sumForMonthUpToDay(expenses, monthK, dayOfMonth) {
+function sumForMonthUpToDay(expenses, monthK, dayOfMonth, category) {
   let total = 0;
   for (const e of expenses) {
     if (monthKey(e.date) !== monthK) continue;
+    if (category && e.category !== category) continue;
     const day = Number(e.date.slice(8, 10));
     if (day <= dayOfMonth) total += e.amount;
   }
@@ -47,7 +48,7 @@ export default function DashboardPage({
     const prevMonthToDate = sumForMonthUpToDay(state.expenses, prevMonthK, dayOfMonth);
     if (prevMonthToDate <= 0) return null;
     const pct = ((monthTotal - prevMonthToDate) / prevMonthToDate) * 100;
-    return { text: `${pct >= 0 ? "+" : ""}${Math.round(pct)}%`, trend: pct < 0 ? "down" : "up" };
+    return { text: `${pct >= 0 ? "+" : ""}${Math.round(pct)}%`, trend: pct < 0 ? "down" : "up", absPct: Math.abs(Math.round(pct)) };
   }, [state.expenses, monthTotal]);
 
   const topCategory = useMemo(() => {
@@ -57,6 +58,42 @@ export default function DashboardPage({
     for (const [cat, amt] of Object.entries(byCat)) { if (amt > topAmt) { top = cat; topAmt = amt; } }
     return top;
   }, [expensesThisMonth]);
+
+  const topCategoryShare = useMemo(() => {
+    if (monthTotal <= 0 || topCategory === "—") return null;
+    const spent = expensesThisMonth.filter(e => e.category === topCategory).reduce((s, e) => s + e.amount, 0);
+    return Math.round((spent / monthTotal) * 100);
+  }, [expensesThisMonth, monthTotal, topCategory]);
+
+  // Biggest category mover vs. the same day-of-month last month -- same
+  // "up to today" comparison monthDelta already uses, so a still-early month
+  // isn't compared against a full prior month. Only surfaced when there's a
+  // real prior-month baseline (avoids "+400%" noise from a brand-new category)
+  // and the swing is large enough to be worth mentioning, not rounding noise.
+  const biggestMover = useMemo(() => {
+    const today = todayISO();
+    const dayOfMonth = Number(today.slice(8, 10));
+    const monthK = today.slice(0, 7);
+    const d = new Date(today);
+    d.setMonth(d.getMonth() - 1);
+    const prevMonthK = new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 7);
+
+    let best = null;
+    for (const cat of state.categories) {
+      const cur = sumForMonthUpToDay(state.expenses, monthK, dayOfMonth, cat);
+      const prev = sumForMonthUpToDay(state.expenses, prevMonthK, dayOfMonth, cat);
+      if (prev <= 0 || cur <= 0) continue;
+      const pct = ((cur - prev) / prev) * 100;
+      if (Math.abs(pct) < 15) continue;
+      if (!best || Math.abs(pct) > Math.abs(best.pct)) best = { category: cat, pct };
+    }
+    return best;
+  }, [state.categories, state.expenses]);
+
+  const dailyAverage = useMemo(() => {
+    const dayOfMonth = Number(todayISO().slice(8, 10));
+    return monthTotal / dayOfMonth;
+  }, [monthTotal]);
 
   const totalBudget = state.settings.totalBudget || 0;
   const budgetRemaining = totalBudget - monthTotal;
@@ -149,13 +186,36 @@ export default function DashboardPage({
         <KpiCard label="Spent This Month" value={formatMoney(monthTotal, currency)} delta={monthDelta?.text} trend={monthDelta?.trend} icon={TrendingUp} />
         <KpiCard label="Budget Remaining" value={totalBudget > 0 ? formatMoney(budgetRemaining, currency) : "No budget set"} icon={Wallet} />
         <KpiCard label="Top Category" value={topCategory} icon={Tag} />
-        <KpiCard label="Entries Logged" value={state.expenses.length} icon={Receipt} />
+        <KpiCard label="Daily Average" value={formatMoney(dailyAverage, currency)} icon={CalendarDays} />
       </div>
 
+      {(monthDelta || topCategoryShare !== null || biggestMover) && (
+        <div className="order-2 bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-2">
+          <h2 className="text-sm font-semibold text-pr-primary flex items-center gap-1.5">
+            <Sparkles size={15} className="text-pr-accent" /> Insights
+          </h2>
+          {monthDelta && (
+            <p className="text-sm text-pr-secondary">
+              You've spent <span className="font-medium text-pr-primary">{monthDelta.absPct}%{monthDelta.trend === "up" ? " more" : " less"}</span> so far this month compared to the same point last month.
+            </p>
+          )}
+          {topCategoryShare !== null && (
+            <p className="text-sm text-pr-secondary">
+              <span className="font-medium text-pr-primary">{topCategoryShare}%</span> of this month's spending went to <span className="font-medium text-pr-primary">{topCategory}</span>.
+            </p>
+          )}
+          {biggestMover && (
+            <p className="text-sm text-pr-secondary">
+              <span className="font-medium text-pr-primary">{biggestMover.category}</span> spending is {biggestMover.pct > 0 ? "up" : "down"} <span className="font-medium text-pr-primary">{Math.abs(Math.round(biggestMover.pct))}%</span> vs. last month.
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Mobile-only reorder: Recent Transactions (checked constantly) surfaces
-          above the charts (browsed occasionally) via `order`, without
-          touching desktop's layout at all -- see the mobile UX review. */}
-      <div className="order-4 lg:order-2 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
+          above the charts and insights (browsed occasionally) via `order`,
+          without touching desktop's layout at all -- see the mobile UX review. */}
+      <div className="order-5 lg:order-3 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-4">
         <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-3">
           <h2 className="text-sm font-semibold text-pr-primary">14-Day Trend</h2>
           <LineChart series={[{ label: "Spend", color: "#2D63EA", points: trendSeries.points }]} xLabels={trendSeries.labels} theme={theme} />
@@ -170,7 +230,7 @@ export default function DashboardPage({
         </div>
       </div>
 
-      <div className="order-3 bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
+      <div className="order-4 bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-pr-primary">Budget Health</h2>
         {budgetHealth.length === 0 ? (
           <p className="text-sm text-pr-secondary">No budgets set yet.</p>
@@ -181,7 +241,7 @@ export default function DashboardPage({
         )}
       </div>
 
-      <div className="order-2 lg:order-4 bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
+      <div className="order-3 lg:order-5 bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-pr-primary">Recent Transactions</h2>
         <DataTable
           columns={[
