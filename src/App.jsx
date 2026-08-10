@@ -111,8 +111,8 @@ export default function App() {
 
   return (
     <Shell
-      title="Tally"
-      subtitle="Personal finance"
+      title="Spendly"
+      subtitle="Know where your money goes"
       email={user.email}
       displayName={state.settings.displayName}
       onSignOut={signOutUser}
