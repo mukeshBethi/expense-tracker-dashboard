@@ -8,7 +8,6 @@ import Input from "../components/ui/Input.jsx";
 import Button from "../components/ui/Button.jsx";
 import DataTable from "../components/ui/DataTable.jsx";
 import Toast from "../components/ui/Toast.jsx";
-import ExpenseFormModal from "../components/ExpenseFormModal.jsx";
 import ConfirmModal from "../components/ConfirmModal.jsx";
 
 const SORT_OPTIONS = ["Newest first", "Oldest first", "Amount (high to low)", "Amount (low to high)"];
@@ -21,7 +20,7 @@ const SORT_MAP = {
 
 export default function ExpensesPage({
   state, expensesThisMonth, deleteExpenses,
-  isExpenseModalOpen, openExpenseModal, closeExpenseModal, editingExpense, handleFormSubmit,
+  openExpenseModal,
   confirmDeleteId, setConfirmDeleteId, deleteExpense,
   toastMessage, dismissToast, setToastMessage,
 }) {
@@ -140,13 +139,6 @@ export default function ExpensesPage({
         )}
       </div>
 
-      <ExpenseFormModal
-        open={isExpenseModalOpen}
-        categories={state.categories}
-        editingExpense={editingExpense}
-        onSubmit={handleFormSubmit}
-        onClose={closeExpenseModal}
-      />
       <ConfirmModal
         open={confirmDeleteId !== null}
         message="Delete this expense? This cannot be undone."

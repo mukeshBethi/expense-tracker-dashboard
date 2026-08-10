@@ -7,6 +7,7 @@ import { useTheme } from "./hooks/useTheme.js";
 import { formatMoney } from "./lib/format.js";
 import AuthScreen from "./components/AuthScreen.jsx";
 import Shell from "./components/shell/Shell.jsx";
+import ExpenseFormModal from "./components/ExpenseFormModal.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
 import ExpensesPage from "./pages/ExpensesPage.jsx";
 import BudgetsPage from "./pages/BudgetsPage.jsx";
@@ -110,27 +111,41 @@ export default function App() {
   const budgetUsedPct = `${totalBudget > 0 ? Math.min(100, Math.round((monthTotalRaw / totalBudget) * 100)) : 0}%`;
 
   return (
-    <Shell
-      title="Spendly"
-      subtitle="Know where your money goes."
-      email={user.email}
-      displayName={state.settings.displayName}
-      onSignOut={signOutUser}
-      theme={theme}
-      toggleTheme={toggleTheme}
-      onOpenAdd={() => openExpenseModal(null)}
-      monthTotal={formatMoney(monthTotalRaw, state.settings.currency)}
-      totalBudgetShort={formatMoney(totalBudget, state.settings.currency)}
-      budgetUsedPct={budgetUsedPct}
-    >
-      <Routes>
-        <Route path="/" element={<DashboardPage {...dashboardProps} />} />
-        <Route path="/expenses" element={<ExpensesPage {...expensesProps} />} />
-        <Route path="/budgets" element={<BudgetsPage {...budgetsProps} />} />
-        <Route path="/analytics" element={<AnalyticsPage {...analyticsProps} />} />
-        <Route path="/categories" element={<CategoriesPage {...categoriesProps} />} />
-        <Route path="/settings" element={<SettingsPage {...settingsProps} />} />
-      </Routes>
-    </Shell>
+    <>
+      <Shell
+        title="Spendly"
+        subtitle="Know where your money goes."
+        email={user.email}
+        displayName={state.settings.displayName}
+        onSignOut={signOutUser}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        onOpenAdd={() => openExpenseModal(null)}
+        monthTotal={formatMoney(monthTotalRaw, state.settings.currency)}
+        totalBudgetShort={formatMoney(totalBudget, state.settings.currency)}
+        budgetUsedPct={budgetUsedPct}
+      >
+        <Routes>
+          <Route path="/" element={<DashboardPage {...dashboardProps} />} />
+          <Route path="/expenses" element={<ExpensesPage {...expensesProps} />} />
+          <Route path="/budgets" element={<BudgetsPage {...budgetsProps} />} />
+          <Route path="/analytics" element={<AnalyticsPage {...analyticsProps} />} />
+          <Route path="/categories" element={<CategoriesPage {...categoriesProps} />} />
+          <Route path="/settings" element={<SettingsPage {...settingsProps} />} />
+        </Routes>
+      </Shell>
+      {/* Rendered once, globally, regardless of route -- the "Add expense" FAB
+          and TopBar button live in Shell (visible on every page), but this
+          modal used to be mounted only inside DashboardPage/ExpensesPage, so
+          triggering it from any other page set isExpenseModalOpen with
+          nothing mounted to display it. */}
+      <ExpenseFormModal
+        open={isExpenseModalOpen}
+        categories={state.categories}
+        editingExpense={editingExpense}
+        onSubmit={handleFormSubmit}
+        onClose={closeExpenseModal}
+      />
+    </>
   );
 }

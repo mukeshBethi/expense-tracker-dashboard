@@ -8,7 +8,6 @@ import LineChart from "../components/ui/LineChart.jsx";
 import PieChart from "../components/ui/PieChart.jsx";
 import Alert from "../components/ui/Alert.jsx";
 import Toast from "../components/ui/Toast.jsx";
-import ExpenseFormModal from "../components/ExpenseFormModal.jsx";
 import ConfirmModal from "../components/ConfirmModal.jsx";
 
 const VIZ_PALETTE = ["#2D63EA", "#16A34A", "#D97706", "#E11D48", "#7C3AED", "#0891B2", "#EA580C", "#4A6290"];
@@ -30,7 +29,7 @@ function sumForMonthUpToDay(expenses, monthK, dayOfMonth) {
 
 export default function DashboardPage({
   state, theme, expensesThisMonth,
-  isExpenseModalOpen, openExpenseModal, closeExpenseModal, editingExpense, handleFormSubmit,
+  openExpenseModal,
   confirmDeleteId, setConfirmDeleteId, deleteExpense,
   toastMessage, dismissToast, setToastMessage,
 }) {
@@ -183,13 +182,6 @@ export default function DashboardPage({
         />
       </div>
 
-      <ExpenseFormModal
-        open={isExpenseModalOpen}
-        categories={state.categories}
-        editingExpense={editingExpense}
-        onSubmit={handleFormSubmit}
-        onClose={closeExpenseModal}
-      />
       <ConfirmModal
         open={confirmDeleteId !== null}
         message="Delete this expense? This cannot be undone."
