@@ -82,23 +82,25 @@ export default function ExpensesPage({
 
   return (
     <div className="flex flex-col gap-6 p-6 lg:p-8">
-      {/* Desktop/tablet: filters stay inline, unchanged. Mobile: three
-          full-width controls stacked ahead of any actual data was real
-          "too much chrome before content" -- collapsed into a single
-          trigger + bottom sheet instead, per the mobile UX review. */}
-      <div className="hidden md:flex flex-col sm:flex-row gap-3 sm:items-end sm:justify-between">
-        <div className="flex flex-col sm:flex-row gap-3 flex-1">
-          <div className="w-full sm:w-52">
-            <Combobox options={state.categories} value={filterCategory} onChange={setFilterCategory} allowClear clearLabel="All categories" placeholder="All categories" />
+      {/* Sticky: on a long expense list, having to scroll back to the top to
+          change a filter was real friction. Desktop/tablet keeps the inline
+          row; mobile keeps the single Filters trigger -- both just stay put
+          while the table/cards scroll underneath. */}
+      <div className="sticky top-0 z-10 bg-pr-page pt-1 pb-3 -mb-1">
+        <div className="hidden md:flex flex-col sm:flex-row gap-3 sm:items-end sm:justify-between">
+          <div className="flex flex-col sm:flex-row gap-3 flex-1">
+            <div className="w-full sm:w-52">
+              <Combobox options={state.categories} value={filterCategory} onChange={setFilterCategory} allowClear clearLabel="All categories" placeholder="All categories" />
+            </div>
+            <Input placeholder="Search notes…" value={search} onChange={e => setSearch(e.target.value)} className="w-full sm:w-60" />
+            <Select value={sortLabel} onChange={e => setSortLabel(e.target.value)} options={SORT_OPTIONS} className="w-full sm:w-52" />
           </div>
-          <Input placeholder="Search notes…" value={search} onChange={e => setSearch(e.target.value)} className="w-full sm:w-60" />
-          <Select value={sortLabel} onChange={e => setSortLabel(e.target.value)} options={SORT_OPTIONS} className="w-full sm:w-52" />
         </div>
-      </div>
-      <div className="md:hidden">
-        <Button variant="secondary" icon={SlidersHorizontal} onClick={() => setFilterSheetOpen(true)} className="w-full">
-          Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
-        </Button>
+        <div className="md:hidden">
+          <Button variant="secondary" icon={SlidersHorizontal} onClick={() => setFilterSheetOpen(true)} className="w-full">
+            Filters{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
+          </Button>
+        </div>
       </div>
       <Modal
         open={filterSheetOpen}
