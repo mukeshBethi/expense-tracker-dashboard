@@ -52,26 +52,26 @@ export default function SettingsPage({
 
       <div className="bg-pr-card shadow-pr-sm rounded-pr-card border border-pr-border-subtle p-5 flex flex-col gap-4">
         <h2 className="text-sm font-semibold text-pr-primary">Preferences</h2>
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-sm text-pr-primary">Dark Mode</p>
             <p className="text-xs text-pr-tertiary">Switch between light and dark themes.</p>
           </div>
-          <Switch checked={theme === "dark"} onChange={() => toggleTheme()} />
+          <div className="mt-0.5 flex-shrink-0"><Switch checked={theme === "dark"} onChange={() => toggleTheme()} /></div>
         </div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-sm text-pr-primary">Budget Alerts</p>
             <p className="text-xs text-pr-tertiary">Show a warning on the Dashboard when a category goes over budget.</p>
           </div>
-          <Switch checked={settings.budgetAlertsEnabled} onChange={v => { setBudgetAlertsEnabled(v); setToastMessage("Budget alerts preference saved."); }} />
+          <div className="mt-0.5 flex-shrink-0"><Switch checked={settings.budgetAlertsEnabled} onChange={v => { setBudgetAlertsEnabled(v); setToastMessage("Budget alerts preference saved."); }} /></div>
         </div>
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-sm text-pr-primary">Weekly Summary</p>
             <p className="text-xs text-pr-tertiary">Preference only — no email is sent yet.</p>
           </div>
-          <Switch checked={settings.weeklySummaryEnabled} onChange={v => { setWeeklySummaryEnabled(v); setToastMessage("Weekly summary preference saved."); }} />
+          <div className="mt-0.5 flex-shrink-0"><Switch checked={settings.weeklySummaryEnabled} onChange={v => { setWeeklySummaryEnabled(v); setToastMessage("Weekly summary preference saved."); }} /></div>
         </div>
       </div>
 
